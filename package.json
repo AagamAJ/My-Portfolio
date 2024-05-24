@@ -1,7 +1,7 @@
 {
-    "name": "Aagam Golechha",
+    "name": "Portfolio Web-Page",
     "version": "1.0.0",
-    "description": "Aagam Golechha Portfolio",
+    "description": "Aagam Golechha - Portfolio",
     "source": "index.html",
     "homepage": "https://AagamAJ.github.io/My-Portfolio",
     "scripts": {
@@ -15,7 +15,7 @@
         "type": "git",
         "url": "https://github.com/AagamAJ/My-Portfolio"
     },
-    "author": "Microsoft",
+    "author": "Aagam Golechha",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/microsoft/codespaces-teaching-template-js/issues"
