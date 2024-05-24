@@ -46,7 +46,7 @@ const projectList = [
     title: "MY RESUME SITE",
     description:
       "Created using technologies such as HTML and CSS, and deployed to GitHub pages. Includes my Expertise and Problem Solving Abilities.",
-    url: "https://aagamaj.github.io/My-Resume/",
+    url: "https://aagam-resume.netlify.app/",
   },
   {
     title: "MY - PORTFOLIO",
