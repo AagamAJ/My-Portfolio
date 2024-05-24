@@ -25304,7 +25304,7 @@ var _reactDefault = parcelHelpers.interopDefault(_react);
  * freely use on your site.
  */ var _motionBackgroundJpg = require("../images/motion-background.jpg");
 var _motionBackgroundJpgDefault = parcelHelpers.interopDefault(_motionBackgroundJpg);
-const imageAltText = "purple and blue abstract background";
+const imageAltText = "Purple and Blue Abstract Background";
 /**
  * Sort description that expands on your title on the Home component.
  */ const description = "I'm an IT student at RGPV University, Bhopal, passionate about intuitive UI design. With expertise in ReactJS, JavaScript, and MongoDB, I aim to create innovative solutions blending creativity and simplicity for optimal user experiences.";
@@ -26751,7 +26751,7 @@ var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
  * freely use on your site.
  */ var _ajBgImgJpg = require("../images/Aj-BgImg.jpg");
 var _ajBgImgJpgDefault = parcelHelpers.interopDefault(_ajBgImgJpg);
-const imageAltText = "Adult female in office setting leaning against a glass wall while holding a platinum Microsoft Surface Pro 7 in tablet mode preparing to write with Microsoft Surface Pen";
+const imageAltText = "Aagam Golechha Sitting on a Rock with an Awesome Sunrise in BackGround";
 const Home = ({ name , title  })=>{
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("section", {
         id: "home",
@@ -26809,7 +26809,7 @@ const Home = ({ name , title  })=>{
                         height: "3rem",
                         width: "3rem"
                     },
-                    alt: ""
+                    alt: "Down-Arrow"
                 }, void 0, false, {
                     fileName: "src/Components/Home.jsx",
                     lineNumber: 36,
@@ -26881,7 +26881,7 @@ var _reactDefault = parcelHelpers.interopDefault(_react);
  * freely use on your site.
  */ var _designDeskJpeg = require("../images/design-desk.jpeg");
 var _designDeskJpegDefault = parcelHelpers.interopDefault(_designDeskJpeg);
-const imageAltText = "desktop with books and laptop";
+const imageAltText = "Desktop with Books and Laptop";
 /**
  * Project list
  *
