@@ -52,7 +52,7 @@ const projectList = [
     title: "MY - PORTFOLIO",
     description:
       "I've crafted my portfolio website using React.js and JSX, blending my coding prowess with design expertise, in a visually appealing and interactive manner.",
-    url: "https://aagamaj.github.io/My-Portfolio/",
+    url: "https://aagamjain-portfolio.netlify.app/",
   },
 ];
 
