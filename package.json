@@ -9,11 +9,11 @@
         "build": "parcel build",
         "build-gh": "parcel build --public-url 'https://AagamAJ.github.io/My-Portfolio'",
         "predeploy": "npm run build",
-        "deploy": "gh-pages -d build"
+        "deploy": "gh-pages -d dist"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/microsoft/codespaces-teaching-template-js.git"
+        "url": "https://github.com/AagamAJ/My-Portfolio"
     },
     "author": "Microsoft",
     "license": "ISC",
