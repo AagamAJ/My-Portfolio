@@ -165,6 +165,25 @@ a:hover {
   font-weight: 600;
 }
 
+.portfolio-big-container {
+  flex-direction: row;
+  padding-top: 3rem;
+  display: flex;
+}
+
+.portfolio-image {
+  align-self: center;
+  max-width: 38%;
+  margin-left: 3rem;
+  line-height: 0;
+}
+
+.portfolio-image img {
+  object-fit: cover;
+  width: 95%;
+  height: 25rem;
+}
+
 .container {
   grid-gap: 20px;
   grid-template-columns: 330px 300px;
@@ -180,6 +199,11 @@ a:hover {
   justify-content: flex-start;
   padding: 24px 16px;
   display: flex;
+}
+
+.project-title {
+  flex-basis: 40px;
+  font-weight: 600;
 }
 
 img.socialIcon {
