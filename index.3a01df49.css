@@ -152,6 +152,14 @@ a:hover {
   padding: 1rem 3rem 0;
 }
 
+.padding {
+  padding: 5rem 0;
+}
+
+.portfolio-head {
+  text-align: center;
+}
+
 .container {
   grid-gap: 20px;
   grid-template-columns: 330px 300px;
