@@ -3971,6 +3971,7 @@ const About = ()=>{
                 style: {},
                 children: [
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
+                        className: "about-head",
                         children: "About Myself"
                     }, void 0, false, {
                         fileName: "src/Components/About.jsx",

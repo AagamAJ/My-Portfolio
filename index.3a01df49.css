@@ -139,6 +139,10 @@ a:hover {
   padding: 4rem;
 }
 
+.about-head {
+  font-weight: 600;
+}
+
 .about-list {
   text-align: left;
   columns: 2;
@@ -158,6 +162,7 @@ a:hover {
 
 .portfolio-head {
   text-align: center;
+  font-weight: 600;
 }
 
 .container {
