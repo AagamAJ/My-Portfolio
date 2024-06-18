@@ -1,0 +1,16 @@
+p.large {
+  font-size: 20px;
+}
+
+.portfolio-image {
+  display: none;
+}
+
+.container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 30px;
+  display: flex;
+}
+/*# sourceMappingURL=index.2d074b33.css.map */

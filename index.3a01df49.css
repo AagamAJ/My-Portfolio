@@ -24,10 +24,6 @@ section.min-height {
   min-height: 100vh;
 }
 
-section.padding {
-  padding: 5rem 0;
-}
-
 section img.background {
   object-fit: cover;
   pointer-events: none;
@@ -95,6 +91,65 @@ a {
 
 a:hover {
   color: #4e567e;
+}
+
+.header-div {
+  z-index: 10;
+  background: #ffffffbf;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  position: fixed;
+  top: 0;
+}
+
+.my-name {
+  width: 17rem;
+  position: absolute;
+  top: 16rem;
+  left: 4rem;
+}
+
+.my-name h1 {
+  line-height: .9;
+}
+
+.down-arrow {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+}
+
+.down-arrow a {
+  width: 3rem;
+  height: 3rem;
+}
+
+.section-about {
+  padding: 5rem 0;
+}
+
+#about {
+  text-align: center;
+  background-color: #fff;
+  width: 50%;
+  margin: 3rem auto;
+  padding: 4rem;
+}
+
+.about-list {
+  text-align: left;
+  columns: 2;
+  font-size: "1.25rem";
+  margin: "2rem 3rem";
+  gap: "3rem";
+  list-style-type: circle;
+}
+
+.about-below-quote {
+  padding: 1rem 3rem 0;
 }
 
 .container {
