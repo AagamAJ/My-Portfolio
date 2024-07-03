@@ -1,0 +1,50 @@
+/* Width below 800px */
+
+.my-name {
+	position: absolute;
+	top: 12rem;
+	left: 3rem;
+	width: 14rem;
+}
+
+.my-name h1 {
+    font-size: 4rem;
+}
+
+.my-name h2 {
+    font-size: 1.9rem;
+}
+
+.down-arrow {
+    bottom: 2.5rem;
+}
+
+#about {
+    width: 70%;
+}
+
+.about-list {
+    text-align: center;
+    font-size: 1.25rem;
+    margin: 2rem 2rem;
+    columns: 1;
+    list-style: circle;
+}
+
+li {
+    text-align: start;
+    margin-left: 5%;
+}
+
+.about-below-quote {
+    padding: 1rem 2rem 0;
+}
+
+.section-about {
+	padding-top: 5rem;
+    padding-bottom: 2rem;
+}
+
+.portfolio-head {
+    margin-block: -2rem;
+}

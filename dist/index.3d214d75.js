@@ -142,9 +142,450 @@
       this[globalName] = mainExports;
     }
   }
-})({"1xC6H":[function(require,module,exports) {
-var Refresh = require("react-refresh/runtime");
-var ErrorOverlay = require("react-error-overlay");
+})({"km5uZ":[function(require,module,exports) {
+var global = arguments[3];
+var HMR_HOST = null;
+var HMR_PORT = null;
+var HMR_SECURE = false;
+var HMR_ENV_HASH = "d6ea1d42532a7575";
+var HMR_USE_SSE = false;
+module.bundle.HMR_BUNDLE_ID = "0a8ecb283d214d75";
+"use strict";
+/* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, HMR_USE_SSE, chrome, browser, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
+import type {
+  HMRAsset,
+  HMRMessage,
+} from '@parcel/reporter-dev-server/src/HMRServer.js';
+interface ParcelRequire {
+  (string): mixed;
+  cache: {|[string]: ParcelModule|};
+  hotData: {|[string]: mixed|};
+  Module: any;
+  parent: ?ParcelRequire;
+  isParcelRequire: true;
+  modules: {|[string]: [Function, {|[string]: string|}]|};
+  HMR_BUNDLE_ID: string;
+  root: ParcelRequire;
+}
+interface ParcelModule {
+  hot: {|
+    data: mixed,
+    accept(cb: (Function) => void): void,
+    dispose(cb: (mixed) => void): void,
+    // accept(deps: Array<string> | string, cb: (Function) => void): void,
+    // decline(): void,
+    _acceptCallbacks: Array<(Function) => void>,
+    _disposeCallbacks: Array<(mixed) => void>,
+  |};
+}
+interface ExtensionContext {
+  runtime: {|
+    reload(): void,
+    getURL(url: string): string;
+    getManifest(): {manifest_version: number, ...};
+  |};
+}
+declare var module: {bundle: ParcelRequire, ...};
+declare var HMR_HOST: string;
+declare var HMR_PORT: string;
+declare var HMR_ENV_HASH: string;
+declare var HMR_SECURE: boolean;
+declare var HMR_USE_SSE: boolean;
+declare var chrome: ExtensionContext;
+declare var browser: ExtensionContext;
+declare var __parcel__import__: (string) => Promise<void>;
+declare var __parcel__importScripts__: (string) => Promise<void>;
+declare var globalThis: typeof self;
+declare var ServiceWorkerGlobalScope: Object;
+*/ var OVERLAY_ID = "__parcel__error__overlay__";
+var OldModule = module.bundle.Module;
+function Module(moduleName) {
+    OldModule.call(this, moduleName);
+    this.hot = {
+        data: module.bundle.hotData[moduleName],
+        _acceptCallbacks: [],
+        _disposeCallbacks: [],
+        accept: function(fn) {
+            this._acceptCallbacks.push(fn || function() {});
+        },
+        dispose: function(fn) {
+            this._disposeCallbacks.push(fn);
+        }
+    };
+    module.bundle.hotData[moduleName] = undefined;
+}
+module.bundle.Module = Module;
+module.bundle.hotData = {};
+var checkedAssets /*: {|[string]: boolean|} */ , assetsToDispose /*: Array<[ParcelRequire, string]> */ , assetsToAccept /*: Array<[ParcelRequire, string]> */ ;
+function getHostname() {
+    return HMR_HOST || (location.protocol.indexOf("http") === 0 ? location.hostname : "localhost");
+}
+function getPort() {
+    return HMR_PORT || location.port;
+}
+// eslint-disable-next-line no-redeclare
+var parent = module.bundle.parent;
+if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== "undefined") {
+    var hostname = getHostname();
+    var port = getPort();
+    var protocol = HMR_SECURE || location.protocol == "https:" && ![
+        "localhost",
+        "127.0.0.1",
+        "0.0.0.0"
+    ].includes(hostname) ? "wss" : "ws";
+    var ws;
+    if (HMR_USE_SSE) ws = new EventSource("/__parcel_hmr");
+    else try {
+        ws = new WebSocket(protocol + "://" + hostname + (port ? ":" + port : "") + "/");
+    } catch (err) {
+        if (err.message) console.error(err.message);
+        ws = {};
+    }
+    // Web extension context
+    var extCtx = typeof browser === "undefined" ? typeof chrome === "undefined" ? null : chrome : browser;
+    // Safari doesn't support sourceURL in error stacks.
+    // eval may also be disabled via CSP, so do a quick check.
+    var supportsSourceURL = false;
+    try {
+        (0, eval)('throw new Error("test"); //# sourceURL=test.js');
+    } catch (err) {
+        supportsSourceURL = err.stack.includes("test.js");
+    }
+    // $FlowFixMe
+    ws.onmessage = async function(event /*: {data: string, ...} */ ) {
+        checkedAssets = {} /*: {|[string]: boolean|} */ ;
+        assetsToAccept = [];
+        assetsToDispose = [];
+        var data /*: HMRMessage */  = JSON.parse(event.data);
+        if (data.type === "update") {
+            // Remove error overlay if there is one
+            if (typeof document !== "undefined") removeErrorOverlay();
+            let assets = data.assets.filter((asset)=>asset.envHash === HMR_ENV_HASH);
+            // Handle HMR Update
+            let handled = assets.every((asset)=>{
+                return asset.type === "css" || asset.type === "js" && hmrAcceptCheck(module.bundle.root, asset.id, asset.depsByBundle);
+            });
+            if (handled) {
+                console.clear();
+                // Dispatch custom event so other runtimes (e.g React Refresh) are aware.
+                if (typeof window !== "undefined" && typeof CustomEvent !== "undefined") window.dispatchEvent(new CustomEvent("parcelhmraccept"));
+                await hmrApplyUpdates(assets);
+                // Dispose all old assets.
+                let processedAssets = {} /*: {|[string]: boolean|} */ ;
+                for(let i = 0; i < assetsToDispose.length; i++){
+                    let id = assetsToDispose[i][1];
+                    if (!processedAssets[id]) {
+                        hmrDispose(assetsToDispose[i][0], id);
+                        processedAssets[id] = true;
+                    }
+                }
+                // Run accept callbacks. This will also re-execute other disposed assets in topological order.
+                processedAssets = {};
+                for(let i = 0; i < assetsToAccept.length; i++){
+                    let id = assetsToAccept[i][1];
+                    if (!processedAssets[id]) {
+                        hmrAccept(assetsToAccept[i][0], id);
+                        processedAssets[id] = true;
+                    }
+                }
+            } else fullReload();
+        }
+        if (data.type === "error") {
+            // Log parcel errors to console
+            for (let ansiDiagnostic of data.diagnostics.ansi){
+                let stack = ansiDiagnostic.codeframe ? ansiDiagnostic.codeframe : ansiDiagnostic.stack;
+                console.error("\uD83D\uDEA8 [parcel]: " + ansiDiagnostic.message + "\n" + stack + "\n\n" + ansiDiagnostic.hints.join("\n"));
+            }
+            if (typeof document !== "undefined") {
+                // Render the fancy html overlay
+                removeErrorOverlay();
+                var overlay = createErrorOverlay(data.diagnostics.html);
+                // $FlowFixMe
+                document.body.appendChild(overlay);
+            }
+        }
+    };
+    if (ws instanceof WebSocket) {
+        ws.onerror = function(e) {
+            if (e.message) console.error(e.message);
+        };
+        ws.onclose = function() {
+            console.warn("[parcel] \uD83D\uDEA8 Connection to the HMR server was lost");
+        };
+    }
+}
+function removeErrorOverlay() {
+    var overlay = document.getElementById(OVERLAY_ID);
+    if (overlay) {
+        overlay.remove();
+        console.log("[parcel] \u2728 Error resolved");
+    }
+}
+function createErrorOverlay(diagnostics) {
+    var overlay = document.createElement("div");
+    overlay.id = OVERLAY_ID;
+    let errorHTML = '<div style="background: black; opacity: 0.85; font-size: 16px; color: white; position: fixed; height: 100%; width: 100%; top: 0px; left: 0px; padding: 30px; font-family: Menlo, Consolas, monospace; z-index: 9999;">';
+    for (let diagnostic of diagnostics){
+        let stack = diagnostic.frames.length ? diagnostic.frames.reduce((p, frame)=>{
+            return `${p}
+<a href="/__parcel_launch_editor?file=${encodeURIComponent(frame.location)}" style="text-decoration: underline; color: #888" onclick="fetch(this.href); return false">${frame.location}</a>
+${frame.code}`;
+        }, "") : diagnostic.stack;
+        errorHTML += `
+      <div>
+        <div style="font-size: 18px; font-weight: bold; margin-top: 20px;">
+          \u{1F6A8} ${diagnostic.message}
+        </div>
+        <pre>${stack}</pre>
+        <div>
+          ${diagnostic.hints.map((hint)=>"<div>\uD83D\uDCA1 " + hint + "</div>").join("")}
+        </div>
+        ${diagnostic.documentation ? `<div>\u{1F4DD} <a style="color: violet" href="${diagnostic.documentation}" target="_blank">Learn more</a></div>` : ""}
+      </div>
+    `;
+    }
+    errorHTML += "</div>";
+    overlay.innerHTML = errorHTML;
+    return overlay;
+}
+function fullReload() {
+    if ("reload" in location) location.reload();
+    else if (extCtx && extCtx.runtime && extCtx.runtime.reload) extCtx.runtime.reload();
+}
+function getParents(bundle, id) /*: Array<[ParcelRequire, string]> */ {
+    var modules = bundle.modules;
+    if (!modules) return [];
+    var parents = [];
+    var k, d, dep;
+    for(k in modules)for(d in modules[k][1]){
+        dep = modules[k][1][d];
+        if (dep === id || Array.isArray(dep) && dep[dep.length - 1] === id) parents.push([
+            bundle,
+            k
+        ]);
+    }
+    if (bundle.parent) parents = parents.concat(getParents(bundle.parent, id));
+    return parents;
+}
+function updateLink(link) {
+    var href = link.getAttribute("href");
+    if (!href) return;
+    var newLink = link.cloneNode();
+    newLink.onload = function() {
+        if (link.parentNode !== null) // $FlowFixMe
+        link.parentNode.removeChild(link);
+    };
+    newLink.setAttribute("href", // $FlowFixMe
+    href.split("?")[0] + "?" + Date.now());
+    // $FlowFixMe
+    link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+var cssTimeout = null;
+function reloadCSS() {
+    if (cssTimeout) return;
+    cssTimeout = setTimeout(function() {
+        var links = document.querySelectorAll('link[rel="stylesheet"]');
+        for(var i = 0; i < links.length; i++){
+            // $FlowFixMe[incompatible-type]
+            var href /*: string */  = links[i].getAttribute("href");
+            var hostname = getHostname();
+            var servedFromHMRServer = hostname === "localhost" ? new RegExp("^(https?:\\/\\/(0.0.0.0|127.0.0.1)|localhost):" + getPort()).test(href) : href.indexOf(hostname + ":" + getPort());
+            var absolute = /^https?:\/\//i.test(href) && href.indexOf(location.origin) !== 0 && !servedFromHMRServer;
+            if (!absolute) updateLink(links[i]);
+        }
+        cssTimeout = null;
+    }, 50);
+}
+function hmrDownload(asset) {
+    if (asset.type === "js") {
+        if (typeof document !== "undefined") {
+            let script = document.createElement("script");
+            script.src = asset.url + "?t=" + Date.now();
+            if (asset.outputFormat === "esmodule") script.type = "module";
+            return new Promise((resolve, reject)=>{
+                var _document$head;
+                script.onload = ()=>resolve(script);
+                script.onerror = reject;
+                (_document$head = document.head) === null || _document$head === void 0 || _document$head.appendChild(script);
+            });
+        } else if (typeof importScripts === "function") {
+            // Worker scripts
+            if (asset.outputFormat === "esmodule") return import(asset.url + "?t=" + Date.now());
+            else return new Promise((resolve, reject)=>{
+                try {
+                    importScripts(asset.url + "?t=" + Date.now());
+                    resolve();
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        }
+    }
+}
+async function hmrApplyUpdates(assets) {
+    global.parcelHotUpdate = Object.create(null);
+    let scriptsToRemove;
+    try {
+        // If sourceURL comments aren't supported in eval, we need to load
+        // the update from the dev server over HTTP so that stack traces
+        // are correct in errors/logs. This is much slower than eval, so
+        // we only do it if needed (currently just Safari).
+        // https://bugs.webkit.org/show_bug.cgi?id=137297
+        // This path is also taken if a CSP disallows eval.
+        if (!supportsSourceURL) {
+            let promises = assets.map((asset)=>{
+                var _hmrDownload;
+                return (_hmrDownload = hmrDownload(asset)) === null || _hmrDownload === void 0 ? void 0 : _hmrDownload.catch((err)=>{
+                    // Web extension fix
+                    if (extCtx && extCtx.runtime && extCtx.runtime.getManifest().manifest_version == 3 && typeof ServiceWorkerGlobalScope != "undefined" && global instanceof ServiceWorkerGlobalScope) {
+                        extCtx.runtime.reload();
+                        return;
+                    }
+                    throw err;
+                });
+            });
+            scriptsToRemove = await Promise.all(promises);
+        }
+        assets.forEach(function(asset) {
+            hmrApply(module.bundle.root, asset);
+        });
+    } finally{
+        delete global.parcelHotUpdate;
+        if (scriptsToRemove) scriptsToRemove.forEach((script)=>{
+            if (script) {
+                var _document$head2;
+                (_document$head2 = document.head) === null || _document$head2 === void 0 || _document$head2.removeChild(script);
+            }
+        });
+    }
+}
+function hmrApply(bundle /*: ParcelRequire */ , asset /*:  HMRAsset */ ) {
+    var modules = bundle.modules;
+    if (!modules) return;
+    if (asset.type === "css") reloadCSS();
+    else if (asset.type === "js") {
+        let deps = asset.depsByBundle[bundle.HMR_BUNDLE_ID];
+        if (deps) {
+            if (modules[asset.id]) {
+                // Remove dependencies that are removed and will become orphaned.
+                // This is necessary so that if the asset is added back again, the cache is gone, and we prevent a full page reload.
+                let oldDeps = modules[asset.id][1];
+                for(let dep in oldDeps)if (!deps[dep] || deps[dep] !== oldDeps[dep]) {
+                    let id = oldDeps[dep];
+                    let parents = getParents(module.bundle.root, id);
+                    if (parents.length === 1) hmrDelete(module.bundle.root, id);
+                }
+            }
+            if (supportsSourceURL) // Global eval. We would use `new Function` here but browser
+            // support for source maps is better with eval.
+            (0, eval)(asset.output);
+            // $FlowFixMe
+            let fn = global.parcelHotUpdate[asset.id];
+            modules[asset.id] = [
+                fn,
+                deps
+            ];
+        } else if (bundle.parent) hmrApply(bundle.parent, asset);
+    }
+}
+function hmrDelete(bundle, id) {
+    let modules = bundle.modules;
+    if (!modules) return;
+    if (modules[id]) {
+        // Collect dependencies that will become orphaned when this module is deleted.
+        let deps = modules[id][1];
+        let orphans = [];
+        for(let dep in deps){
+            let parents = getParents(module.bundle.root, deps[dep]);
+            if (parents.length === 1) orphans.push(deps[dep]);
+        }
+        // Delete the module. This must be done before deleting dependencies in case of circular dependencies.
+        delete modules[id];
+        delete bundle.cache[id];
+        // Now delete the orphans.
+        orphans.forEach((id)=>{
+            hmrDelete(module.bundle.root, id);
+        });
+    } else if (bundle.parent) hmrDelete(bundle.parent, id);
+}
+function hmrAcceptCheck(bundle /*: ParcelRequire */ , id /*: string */ , depsByBundle /*: ?{ [string]: { [string]: string } }*/ ) {
+    if (hmrAcceptCheckOne(bundle, id, depsByBundle)) return true;
+    // Traverse parents breadth first. All possible ancestries must accept the HMR update, or we'll reload.
+    let parents = getParents(module.bundle.root, id);
+    let accepted = false;
+    while(parents.length > 0){
+        let v = parents.shift();
+        let a = hmrAcceptCheckOne(v[0], v[1], null);
+        if (a) // If this parent accepts, stop traversing upward, but still consider siblings.
+        accepted = true;
+        else {
+            // Otherwise, queue the parents in the next level upward.
+            let p = getParents(module.bundle.root, v[1]);
+            if (p.length === 0) {
+                // If there are no parents, then we've reached an entry without accepting. Reload.
+                accepted = false;
+                break;
+            }
+            parents.push(...p);
+        }
+    }
+    return accepted;
+}
+function hmrAcceptCheckOne(bundle /*: ParcelRequire */ , id /*: string */ , depsByBundle /*: ?{ [string]: { [string]: string } }*/ ) {
+    var modules = bundle.modules;
+    if (!modules) return;
+    if (depsByBundle && !depsByBundle[bundle.HMR_BUNDLE_ID]) {
+        // If we reached the root bundle without finding where the asset should go,
+        // there's nothing to do. Mark as "accepted" so we don't reload the page.
+        if (!bundle.parent) return true;
+        return hmrAcceptCheck(bundle.parent, id, depsByBundle);
+    }
+    if (checkedAssets[id]) return true;
+    checkedAssets[id] = true;
+    var cached = bundle.cache[id];
+    assetsToDispose.push([
+        bundle,
+        id
+    ]);
+    if (!cached || cached.hot && cached.hot._acceptCallbacks.length) {
+        assetsToAccept.push([
+            bundle,
+            id
+        ]);
+        return true;
+    }
+}
+function hmrDispose(bundle /*: ParcelRequire */ , id /*: string */ ) {
+    var cached = bundle.cache[id];
+    bundle.hotData[id] = {};
+    if (cached && cached.hot) cached.hot.data = bundle.hotData[id];
+    if (cached && cached.hot && cached.hot._disposeCallbacks.length) cached.hot._disposeCallbacks.forEach(function(cb) {
+        cb(bundle.hotData[id]);
+    });
+    delete bundle.cache[id];
+}
+function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
+    // Execute the module.
+    bundle(id);
+    // Run the accept callbacks in the new version of the module.
+    var cached = bundle.cache[id];
+    if (cached && cached.hot && cached.hot._acceptCallbacks.length) cached.hot._acceptCallbacks.forEach(function(cb) {
+        var assetsToAlsoAccept = cb(function() {
+            return getParents(module.bundle.root, id);
+        });
+        if (assetsToAlsoAccept && assetsToAccept.length) {
+            assetsToAlsoAccept.forEach(function(a) {
+                hmrDispose(a[0], a[1]);
+            });
+            // $FlowFixMe[method-unbinding]
+            assetsToAccept.push.apply(assetsToAccept, assetsToAlsoAccept);
+        }
+    });
+}
+
+},{}],"1xC6H":[function(require,module,exports) {
+var Refresh = require("6d18d6bd340e7473");
+var ErrorOverlay = require("74ad5ea14201648c");
 Refresh.injectIntoGlobalHook(window);
 window.$RefreshReg$ = function() {};
 window.$RefreshSig$ = function() {
@@ -163,11 +604,11 @@ window.addEventListener("parcelhmraccept", ()=>{
     ErrorOverlay.dismissRuntimeErrors();
 });
 
-},{"react-refresh/runtime":"786KC","react-error-overlay":"1dldy"}],"786KC":[function(require,module,exports) {
+},{"6d18d6bd340e7473":"786KC","74ad5ea14201648c":"1dldy"}],"786KC":[function(require,module,exports) {
 "use strict";
-module.exports = require("./cjs/react-refresh-runtime.development.js");
+module.exports = require("96622d495519d4e");
 
-},{"./cjs/react-refresh-runtime.development.js":"hdge7"}],"hdge7":[function(require,module,exports) {
+},{"96622d495519d4e":"hdge7"}],"hdge7":[function(require,module,exports) {
 /** @license React v0.9.0
  * react-refresh-runtime.development.js
  *
@@ -627,395 +1068,6 @@ module.exports = require("./cjs/react-refresh-runtime.development.js");
     exports.setSignature = setSignature;
 })();
 
-},{}],"awEvQ":[function(require,module,exports) {
-"use strict";
-var global = arguments[3];
-var HMR_HOST = null;
-var HMR_PORT = null;
-var HMR_SECURE = false;
-var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "0a8ecb283d214d75";
-/* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, globalThis, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
-import type {
-  HMRAsset,
-  HMRMessage,
-} from '@parcel/reporter-dev-server/src/HMRServer.js';
-interface ParcelRequire {
-  (string): mixed;
-  cache: {|[string]: ParcelModule|};
-  hotData: mixed;
-  Module: any;
-  parent: ?ParcelRequire;
-  isParcelRequire: true;
-  modules: {|[string]: [Function, {|[string]: string|}]|};
-  HMR_BUNDLE_ID: string;
-  root: ParcelRequire;
-}
-interface ParcelModule {
-  hot: {|
-    data: mixed,
-    accept(cb: (Function) => void): void,
-    dispose(cb: (mixed) => void): void,
-    // accept(deps: Array<string> | string, cb: (Function) => void): void,
-    // decline(): void,
-    _acceptCallbacks: Array<(Function) => void>,
-    _disposeCallbacks: Array<(mixed) => void>,
-  |};
-}
-interface ExtensionContext {
-  runtime: {|
-    reload(): void,
-    getURL(url: string): string;
-    getManifest(): {manifest_version: number, ...};
-  |};
-}
-declare var module: {bundle: ParcelRequire, ...};
-declare var HMR_HOST: string;
-declare var HMR_PORT: string;
-declare var HMR_ENV_HASH: string;
-declare var HMR_SECURE: boolean;
-declare var chrome: ExtensionContext;
-declare var browser: ExtensionContext;
-declare var __parcel__import__: (string) => Promise<void>;
-declare var __parcel__importScripts__: (string) => Promise<void>;
-declare var globalThis: typeof self;
-declare var ServiceWorkerGlobalScope: Object;
-*/ var OVERLAY_ID = "__parcel__error__overlay__";
-var OldModule = module.bundle.Module;
-function Module(moduleName) {
-    OldModule.call(this, moduleName);
-    this.hot = {
-        data: module.bundle.hotData,
-        _acceptCallbacks: [],
-        _disposeCallbacks: [],
-        accept: function(fn) {
-            this._acceptCallbacks.push(fn || function() {});
-        },
-        dispose: function(fn) {
-            this._disposeCallbacks.push(fn);
-        }
-    };
-    module.bundle.hotData = undefined;
-}
-module.bundle.Module = Module;
-var checkedAssets, acceptedAssets, assetsToAccept /*: Array<[ParcelRequire, string]> */ ;
-function getHostname() {
-    return HMR_HOST || (location.protocol.indexOf("http") === 0 ? location.hostname : "localhost");
-}
-function getPort() {
-    return HMR_PORT || location.port;
-} // eslint-disable-next-line no-redeclare
-var parent = module.bundle.parent;
-if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== "undefined") {
-    var hostname = getHostname();
-    var port = getPort();
-    var protocol = HMR_SECURE || location.protocol == "https:" && !/localhost|127.0.0.1|0.0.0.0/.test(hostname) ? "wss" : "ws";
-    var ws = new WebSocket(protocol + "://" + hostname + (port ? ":" + port : "") + "/"); // Web extension context
-    var extCtx = typeof chrome === "undefined" ? typeof browser === "undefined" ? null : browser : chrome; // Safari doesn't support sourceURL in error stacks.
-    // eval may also be disabled via CSP, so do a quick check.
-    var supportsSourceURL = false;
-    try {
-        (0, eval)('throw new Error("test"); //# sourceURL=test.js');
-    } catch (err) {
-        supportsSourceURL = err.stack.includes("test.js");
-    } // $FlowFixMe
-    ws.onmessage = async function(event) {
-        checkedAssets = {} /*: {|[string]: boolean|} */ ;
-        acceptedAssets = {} /*: {|[string]: boolean|} */ ;
-        assetsToAccept = [];
-        var data = JSON.parse(event.data);
-        if (data.type === "update") {
-            // Remove error overlay if there is one
-            if (typeof document !== "undefined") removeErrorOverlay();
-            let assets = data.assets.filter((asset)=>asset.envHash === HMR_ENV_HASH); // Handle HMR Update
-            let handled = assets.every((asset)=>{
-                return asset.type === "css" || asset.type === "js" && hmrAcceptCheck(module.bundle.root, asset.id, asset.depsByBundle);
-            });
-            if (handled) {
-                console.clear(); // Dispatch custom event so other runtimes (e.g React Refresh) are aware.
-                if (typeof window !== "undefined" && typeof CustomEvent !== "undefined") window.dispatchEvent(new CustomEvent("parcelhmraccept"));
-                await hmrApplyUpdates(assets);
-                for(var i = 0; i < assetsToAccept.length; i++){
-                    var id = assetsToAccept[i][1];
-                    if (!acceptedAssets[id]) hmrAcceptRun(assetsToAccept[i][0], id);
-                }
-            } else fullReload();
-        }
-        if (data.type === "error") {
-            // Log parcel errors to console
-            for (let ansiDiagnostic of data.diagnostics.ansi){
-                let stack = ansiDiagnostic.codeframe ? ansiDiagnostic.codeframe : ansiDiagnostic.stack;
-                console.error("\uD83D\uDEA8 [parcel]: " + ansiDiagnostic.message + "\n" + stack + "\n\n" + ansiDiagnostic.hints.join("\n"));
-            }
-            if (typeof document !== "undefined") {
-                // Render the fancy html overlay
-                removeErrorOverlay();
-                var overlay = createErrorOverlay(data.diagnostics.html); // $FlowFixMe
-                document.body.appendChild(overlay);
-            }
-        }
-    };
-    ws.onerror = function(e) {
-        console.error(e.message);
-    };
-    ws.onclose = function() {
-        console.warn("[parcel] \uD83D\uDEA8 Connection to the HMR server was lost");
-    };
-}
-function removeErrorOverlay() {
-    var overlay = document.getElementById(OVERLAY_ID);
-    if (overlay) {
-        overlay.remove();
-        console.log("[parcel] ✨ Error resolved");
-    }
-}
-function createErrorOverlay(diagnostics) {
-    var overlay = document.createElement("div");
-    overlay.id = OVERLAY_ID;
-    let errorHTML = '<div style="background: black; opacity: 0.85; font-size: 16px; color: white; position: fixed; height: 100%; width: 100%; top: 0px; left: 0px; padding: 30px; font-family: Menlo, Consolas, monospace; z-index: 9999;">';
-    for (let diagnostic of diagnostics){
-        let stack = diagnostic.frames.length ? diagnostic.frames.reduce((p, frame)=>{
-            return `${p}
-<a href="/__parcel_launch_editor?file=${encodeURIComponent(frame.location)}" style="text-decoration: underline; color: #888" onclick="fetch(this.href); return false">${frame.location}</a>
-${frame.code}`;
-        }, "") : diagnostic.stack;
-        errorHTML += `
-      <div>
-        <div style="font-size: 18px; font-weight: bold; margin-top: 20px;">
-          🚨 ${diagnostic.message}
-        </div>
-        <pre>${stack}</pre>
-        <div>
-          ${diagnostic.hints.map((hint)=>"<div>\uD83D\uDCA1 " + hint + "</div>").join("")}
-        </div>
-        ${diagnostic.documentation ? `<div>📝 <a style="color: violet" href="${diagnostic.documentation}" target="_blank">Learn more</a></div>` : ""}
-      </div>
-    `;
-    }
-    errorHTML += "</div>";
-    overlay.innerHTML = errorHTML;
-    return overlay;
-}
-function fullReload() {
-    if ("reload" in location) location.reload();
-    else if (extCtx && extCtx.runtime && extCtx.runtime.reload) extCtx.runtime.reload();
-}
-function getParents(bundle, id) /*: Array<[ParcelRequire, string]> */ {
-    var modules = bundle.modules;
-    if (!modules) return [];
-    var parents = [];
-    var k, d, dep;
-    for(k in modules)for(d in modules[k][1]){
-        dep = modules[k][1][d];
-        if (dep === id || Array.isArray(dep) && dep[dep.length - 1] === id) parents.push([
-            bundle,
-            k
-        ]);
-    }
-    if (bundle.parent) parents = parents.concat(getParents(bundle.parent, id));
-    return parents;
-}
-function updateLink(link) {
-    var newLink = link.cloneNode();
-    newLink.onload = function() {
-        if (link.parentNode !== null) // $FlowFixMe
-        link.parentNode.removeChild(link);
-    };
-    newLink.setAttribute("href", link.getAttribute("href").split("?")[0] + "?" + Date.now()); // $FlowFixMe
-    link.parentNode.insertBefore(newLink, link.nextSibling);
-}
-var cssTimeout = null;
-function reloadCSS() {
-    if (cssTimeout) return;
-    cssTimeout = setTimeout(function() {
-        var links = document.querySelectorAll('link[rel="stylesheet"]');
-        for(var i = 0; i < links.length; i++){
-            // $FlowFixMe[incompatible-type]
-            var href = links[i].getAttribute("href");
-            var hostname = getHostname();
-            var servedFromHMRServer = hostname === "localhost" ? new RegExp("^(https?:\\/\\/(0.0.0.0|127.0.0.1)|localhost):" + getPort()).test(href) : href.indexOf(hostname + ":" + getPort());
-            var absolute = /^https?:\/\//i.test(href) && href.indexOf(location.origin) !== 0 && !servedFromHMRServer;
-            if (!absolute) updateLink(links[i]);
-        }
-        cssTimeout = null;
-    }, 50);
-}
-function hmrDownload(asset) {
-    if (asset.type === "js") {
-        if (typeof document !== "undefined") {
-            let script = document.createElement("script");
-            script.src = asset.url + "?t=" + Date.now();
-            if (asset.outputFormat === "esmodule") script.type = "module";
-            return new Promise((resolve, reject)=>{
-                var _document$head;
-                script.onload = ()=>resolve(script);
-                script.onerror = reject;
-                (_document$head = document.head) === null || _document$head === void 0 || _document$head.appendChild(script);
-            });
-        } else if (typeof importScripts === "function") {
-            // Worker scripts
-            if (asset.outputFormat === "esmodule") return import(asset.url + "?t=" + Date.now());
-            else return new Promise((resolve, reject)=>{
-                try {
-                    importScripts(asset.url + "?t=" + Date.now());
-                    resolve();
-                } catch (err) {
-                    reject(err);
-                }
-            });
-        }
-    }
-}
-async function hmrApplyUpdates(assets) {
-    global.parcelHotUpdate = Object.create(null);
-    let scriptsToRemove;
-    try {
-        // If sourceURL comments aren't supported in eval, we need to load
-        // the update from the dev server over HTTP so that stack traces
-        // are correct in errors/logs. This is much slower than eval, so
-        // we only do it if needed (currently just Safari).
-        // https://bugs.webkit.org/show_bug.cgi?id=137297
-        // This path is also taken if a CSP disallows eval.
-        if (!supportsSourceURL) {
-            let promises = assets.map((asset)=>{
-                var _hmrDownload;
-                return (_hmrDownload = hmrDownload(asset)) === null || _hmrDownload === void 0 ? void 0 : _hmrDownload.catch((err)=>{
-                    // Web extension bugfix for Chromium
-                    // https://bugs.chromium.org/p/chromium/issues/detail?id=1255412#c12
-                    if (extCtx && extCtx.runtime && extCtx.runtime.getManifest().manifest_version == 3) {
-                        if (typeof ServiceWorkerGlobalScope != "undefined" && global instanceof ServiceWorkerGlobalScope) {
-                            extCtx.runtime.reload();
-                            return;
-                        }
-                        asset.url = extCtx.runtime.getURL("/__parcel_hmr_proxy__?url=" + encodeURIComponent(asset.url + "?t=" + Date.now()));
-                        return hmrDownload(asset);
-                    }
-                    throw err;
-                });
-            });
-            scriptsToRemove = await Promise.all(promises);
-        }
-        assets.forEach(function(asset) {
-            hmrApply(module.bundle.root, asset);
-        });
-    } finally{
-        delete global.parcelHotUpdate;
-        if (scriptsToRemove) scriptsToRemove.forEach((script)=>{
-            if (script) {
-                var _document$head2;
-                (_document$head2 = document.head) === null || _document$head2 === void 0 || _document$head2.removeChild(script);
-            }
-        });
-    }
-}
-function hmrApply(bundle, asset) {
-    var modules = bundle.modules;
-    if (!modules) return;
-    if (asset.type === "css") reloadCSS();
-    else if (asset.type === "js") {
-        let deps = asset.depsByBundle[bundle.HMR_BUNDLE_ID];
-        if (deps) {
-            if (modules[asset.id]) {
-                // Remove dependencies that are removed and will become orphaned.
-                // This is necessary so that if the asset is added back again, the cache is gone, and we prevent a full page reload.
-                let oldDeps = modules[asset.id][1];
-                for(let dep in oldDeps)if (!deps[dep] || deps[dep] !== oldDeps[dep]) {
-                    let id = oldDeps[dep];
-                    let parents = getParents(module.bundle.root, id);
-                    if (parents.length === 1) hmrDelete(module.bundle.root, id);
-                }
-            }
-            if (supportsSourceURL) // Global eval. We would use `new Function` here but browser
-            // support for source maps is better with eval.
-            (0, eval)(asset.output);
-             // $FlowFixMe
-            let fn = global.parcelHotUpdate[asset.id];
-            modules[asset.id] = [
-                fn,
-                deps
-            ];
-        } else if (bundle.parent) hmrApply(bundle.parent, asset);
-    }
-}
-function hmrDelete(bundle, id) {
-    let modules = bundle.modules;
-    if (!modules) return;
-    if (modules[id]) {
-        // Collect dependencies that will become orphaned when this module is deleted.
-        let deps = modules[id][1];
-        let orphans = [];
-        for(let dep in deps){
-            let parents = getParents(module.bundle.root, deps[dep]);
-            if (parents.length === 1) orphans.push(deps[dep]);
-        } // Delete the module. This must be done before deleting dependencies in case of circular dependencies.
-        delete modules[id];
-        delete bundle.cache[id]; // Now delete the orphans.
-        orphans.forEach((id)=>{
-            hmrDelete(module.bundle.root, id);
-        });
-    } else if (bundle.parent) hmrDelete(bundle.parent, id);
-}
-function hmrAcceptCheck(bundle, id, depsByBundle) {
-    if (hmrAcceptCheckOne(bundle, id, depsByBundle)) return true;
-     // Traverse parents breadth first. All possible ancestries must accept the HMR update, or we'll reload.
-    let parents = getParents(module.bundle.root, id);
-    let accepted = false;
-    while(parents.length > 0){
-        let v = parents.shift();
-        let a = hmrAcceptCheckOne(v[0], v[1], null);
-        if (a) // If this parent accepts, stop traversing upward, but still consider siblings.
-        accepted = true;
-        else {
-            // Otherwise, queue the parents in the next level upward.
-            let p = getParents(module.bundle.root, v[1]);
-            if (p.length === 0) {
-                // If there are no parents, then we've reached an entry without accepting. Reload.
-                accepted = false;
-                break;
-            }
-            parents.push(...p);
-        }
-    }
-    return accepted;
-}
-function hmrAcceptCheckOne(bundle, id, depsByBundle) {
-    var modules = bundle.modules;
-    if (!modules) return;
-    if (depsByBundle && !depsByBundle[bundle.HMR_BUNDLE_ID]) {
-        // If we reached the root bundle without finding where the asset should go,
-        // there's nothing to do. Mark as "accepted" so we don't reload the page.
-        if (!bundle.parent) return true;
-        return hmrAcceptCheck(bundle.parent, id, depsByBundle);
-    }
-    if (checkedAssets[id]) return true;
-    checkedAssets[id] = true;
-    var cached = bundle.cache[id];
-    assetsToAccept.push([
-        bundle,
-        id
-    ]);
-    if (!cached || cached.hot && cached.hot._acceptCallbacks.length) return true;
-}
-function hmrAcceptRun(bundle, id) {
-    var cached = bundle.cache[id];
-    bundle.hotData = {};
-    if (cached && cached.hot) cached.hot.data = bundle.hotData;
-    if (cached && cached.hot && cached.hot._disposeCallbacks.length) cached.hot._disposeCallbacks.forEach(function(cb) {
-        cb(bundle.hotData);
-    });
-    delete bundle.cache[id];
-    bundle(id);
-    cached = bundle.cache[id];
-    if (cached && cached.hot && cached.hot._acceptCallbacks.length) cached.hot._acceptCallbacks.forEach(function(cb) {
-        var assetsToAlsoAccept = cb(function() {
-            return getParents(module.bundle.root, id);
-        });
-        if (assetsToAlsoAccept && assetsToAccept.length) // $FlowFixMe[method-unbinding]
-        assetsToAccept.push.apply(assetsToAccept, assetsToAlsoAccept);
-    });
-    acceptedAssets[id] = true;
-}
-
 },{}],"bB7Pu":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$e4e3 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
@@ -1032,9 +1084,11 @@ var _reactDomDefault = parcelHelpers.interopDefault(_reactDom);
 var _appJsx = require("./src/App.jsx");
 var _appJsxDefault = parcelHelpers.interopDefault(_appJsx);
 // Use ReactDOM.render for rendering
+// const root = ReactDOM.createRoot(document.getElementById("app"));
+// root.render(<App />);
 (0, _reactDomDefault.default).render(/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _appJsxDefault.default), {}, void 0, false, {
     fileName: "index.js",
-    lineNumber: 7,
+    lineNumber: 9,
     columnNumber: 17
 }, undefined), document.getElementById("app"));
 
@@ -1043,11 +1097,11 @@ var _appJsxDefault = parcelHelpers.interopDefault(_appJsx);
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","react-dom":"j6uA9","./src/App.jsx":"e9Zfo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"iTorj":[function(require,module,exports) {
+},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","./src/App.jsx":"e9Zfo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru","react-dom":"j6uA9"}],"iTorj":[function(require,module,exports) {
 "use strict";
-module.exports = require("./cjs/react-jsx-dev-runtime.development.js");
+module.exports = require("ee51401569654d91");
 
-},{"./cjs/react-jsx-dev-runtime.development.js":"48uCM"}],"48uCM":[function(require,module,exports) {
+},{"ee51401569654d91":"48uCM"}],"48uCM":[function(require,module,exports) {
 /**
  * @license React
  * react-jsx-dev-runtime.development.js
@@ -1059,7 +1113,7 @@ module.exports = require("./cjs/react-jsx-dev-runtime.development.js");
  */ "use strict";
 (function() {
     "use strict";
-    var React = require("react");
+    var React = require("58362d9d82be395f");
     // ATTENTION
     // When adding new symbols to this file,
     // Please consider also adding to 'react-devtools-shared/src/backend/ReactSymbols'
@@ -1122,7 +1176,8 @@ module.exports = require("./cjs/react-jsx-dev-runtime.development.js");
          // Note: typeof might be other than 'symbol' or 'number' (e.g. if it's a polyfill).
         if (type === REACT_FRAGMENT_TYPE || type === REACT_PROFILER_TYPE || enableDebugTracing || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || enableLegacyHidden || type === REACT_OFFSCREEN_TYPE || enableScopeAPI || enableCacheElement || enableTransitionTracing) return true;
         if (typeof type === "object" && type !== null) {
-            if (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || // types supported by any Flight configuration anywhere since
+            if (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || // This needs to include all possible module reference object
+            // types supported by any Flight configuration anywhere since
             // we don't know which Flight build this will end up being used
             // with.
             type.$$typeof === REACT_MODULE_REFERENCE || type.getModuleId !== undefined) return true;
@@ -1316,16 +1371,16 @@ module.exports = require("./cjs/react-jsx-dev-runtime.development.js");
                 } else {
                     try {
                         Fake.call();
-                    } catch (x1) {
-                        control = x1;
+                    } catch (x) {
+                        control = x;
                     }
                     fn.call(Fake.prototype);
                 }
             } else {
                 try {
                     throw Error();
-                } catch (x2) {
-                    control = x2;
+                } catch (x) {
+                    control = x;
                 }
                 fn();
             }
@@ -1796,7 +1851,8 @@ module.exports = require("./cjs/react-jsx-dev-runtime.development.js");
         if (type === null || type === undefined || typeof type === "string") return;
         var propTypes;
         if (typeof type === "function") propTypes = type.propTypes;
-        else if (typeof type === "object" && (type.$$typeof === REACT_FORWARD_REF_TYPE || // Inner props are checked in the reconciler.
+        else if (typeof type === "object" && (type.$$typeof === REACT_FORWARD_REF_TYPE || // Note: Memo only checks outer props here.
+        // Inner props are checked in the reconciler.
         type.$$typeof === REACT_MEMO_TYPE)) propTypes = type.propTypes;
         else return;
         if (propTypes) {
@@ -1876,11 +1932,11 @@ module.exports = require("./cjs/react-jsx-dev-runtime.development.js");
     exports.jsxDEV = jsxDEV$1;
 })();
 
-},{"react":"21dqq"}],"21dqq":[function(require,module,exports) {
+},{"58362d9d82be395f":"21dqq"}],"21dqq":[function(require,module,exports) {
 "use strict";
-module.exports = require("./cjs/react.development.js");
+module.exports = require("a569817e6ea559f6");
 
-},{"./cjs/react.development.js":"6YvXz"}],"6YvXz":[function(require,module,exports) {
+},{"a569817e6ea559f6":"6YvXz"}],"6YvXz":[function(require,module,exports) {
 /**
  * @license React
  * react.development.js
@@ -2932,7 +2988,8 @@ module.exports = require("./cjs/react.development.js");
          // Note: typeof might be other than 'symbol' or 'number' (e.g. if it's a polyfill).
         if (type === REACT_FRAGMENT_TYPE || type === REACT_PROFILER_TYPE || enableDebugTracing || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || enableLegacyHidden || type === REACT_OFFSCREEN_TYPE || enableScopeAPI || enableCacheElement || enableTransitionTracing) return true;
         if (typeof type === "object" && type !== null) {
-            if (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || // types supported by any Flight configuration anywhere since
+            if (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || // This needs to include all possible module reference object
+            // types supported by any Flight configuration anywhere since
             // we don't know which Flight build this will end up being used
             // with.
             type.$$typeof === REACT_MODULE_REFERENCE || type.getModuleId !== undefined) return true;
@@ -3172,16 +3229,16 @@ module.exports = require("./cjs/react.development.js");
                 } else {
                     try {
                         Fake.call();
-                    } catch (x1) {
-                        control = x1;
+                    } catch (x) {
+                        control = x;
                     }
                     fn.call(Fake.prototype);
                 }
             } else {
                 try {
                     throw Error();
-                } catch (x2) {
-                    control = x2;
+                } catch (x) {
+                    control = x;
                 }
                 fn();
             }
@@ -3421,7 +3478,8 @@ module.exports = require("./cjs/react.development.js");
         if (type === null || type === undefined || typeof type === "string") return;
         var propTypes;
         if (typeof type === "function") propTypes = type.propTypes;
-        else if (typeof type === "object" && (type.$$typeof === REACT_FORWARD_REF_TYPE || // Inner props are checked in the reconciler.
+        else if (typeof type === "object" && (type.$$typeof === REACT_FORWARD_REF_TYPE || // Note: Memo only checks outer props here.
+        // Inner props are checked in the reconciler.
         type.$$typeof === REACT_MEMO_TYPE)) propTypes = type.propTypes;
         else return;
         if (propTypes) {
@@ -3582,9 +3640,9 @@ module.exports = require("./cjs/react.development.js");
                     flushActQueue(queue);
                 }
             }
-        } catch (error1) {
+        } catch (error) {
             popActScope(prevActScopeDepth);
-            throw error1;
+            throw error;
         } finally{
             ReactCurrentActQueue.isBatchingLegacy = prevIsBatchingLegacy;
         }
@@ -3744,7 +3802,1820 @@ module.exports = require("./cjs/react.development.js");
     /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */ if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
 })();
 
-},{}],"j6uA9":[function(require,module,exports) {
+},{}],"e9Zfo":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$2430 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$2430.prelude(module);
+
+try {
+/**
+ * Application component
+ *
+ * To contain application wide settings, routes, state, etc.
+ */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _about = require("./Components/About");
+var _aboutDefault = parcelHelpers.interopDefault(_about);
+var _footer = require("./Components/Footer");
+var _footerDefault = parcelHelpers.interopDefault(_footer);
+var _header = require("./Components/Header");
+var _headerDefault = parcelHelpers.interopDefault(_header);
+var _home = require("./Components/Home");
+var _homeDefault = parcelHelpers.interopDefault(_home);
+var _portfolio = require("./Components/Portfolio");
+var _portfolioDefault = parcelHelpers.interopDefault(_portfolio);
+// import "./styles.css";
+// import "../style.css";
+/**
+ * This object represents your information. The project is set so that you
+ * only need to update these here, and values are passed a properties to the
+ * components that need that information.
+ *
+ * Update the values below with your information.
+ *
+ * If you don't have one of the social sites listed, leave it as an empty string.
+ */ const siteProps = {
+    name: "Aagam Golechha",
+    title: "Software Engineer and Web Designer",
+    email: "aagamaj1212@gmail.com",
+    gitHub: "AagamAJ",
+    instagram: "aagam__aj",
+    linkedIn: "aagamgolechha",
+    medium: "",
+    twitter: "aagam_aj",
+    youTube: ""
+};
+const primaryColor = "#4E567E";
+const secondaryColor = "#D2F1E4";
+const App = ()=>{
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        id: "main",
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _headerDefault.default), {}, void 0, false, {
+                fileName: "src/App.jsx",
+                lineNumber: 45,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _homeDefault.default), {
+                name: siteProps.name,
+                title: siteProps.title
+            }, void 0, false, {
+                fileName: "src/App.jsx",
+                lineNumber: 46,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _aboutDefault.default), {}, void 0, false, {
+                fileName: "src/App.jsx",
+                lineNumber: 47,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _portfolioDefault.default), {}, void 0, false, {
+                fileName: "src/App.jsx",
+                lineNumber: 48,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _footerDefault.default), {
+                ...siteProps,
+                primaryColor: primaryColor,
+                secondaryColor: secondaryColor
+            }, void 0, false, {
+                fileName: "src/App.jsx",
+                lineNumber: 49,
+                columnNumber: 7
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "src/App.jsx",
+        lineNumber: 44,
+        columnNumber: 5
+    }, undefined);
+};
+_c = App;
+exports.default = App;
+var _c;
+$RefreshReg$(_c, "App");
+
+  $parcel$ReactRefreshHelpers$2430.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","./Components/About":"kouZu","./Components/Footer":"7GWgX","./Components/Header":"9Dt2F","./Components/Home":"jIEVO","./Components/Portfolio":"lCaEt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"kouZu":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$17a8 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$17a8.prelude(module);
+
+try {
+/**
+ * About component
+ *
+ * Space for you to describe more about yourself.
+ */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+/**
+ * About background image
+ *
+ * Below is a sample image. Upload the image of your choice into the "images"
+ * directory and import here for use. Then, set imageAltText to string that 
+ * represents what you see in that image.
+ *
+ * Need an image? Check out https://unsplash.com to download a image you
+ * freely use on your site.
+ */ var _motionBackgroundJpg = require("../images/motion-background.jpg");
+var _motionBackgroundJpgDefault = parcelHelpers.interopDefault(_motionBackgroundJpg);
+const imageAltText = "Purple and Blue Abstract Background";
+/**
+ * Sort description that expands on your title on the Home component.
+ */ const description = "I'm an IT student at RGPV University, Bhopal, passionate about intuitive UI design. With expertise in ReactJS, JavaScript, and MongoDB, I aim to create innovative solutions blending creativity and simplicity for optimal user experiences.";
+/**
+ * List of some of skills or technologies you work on, are learning,
+ * passionate about, or enjoy,
+ */ const skillsList = [
+    "Full-Stack Development",
+    "Front-End Developmemnt",
+    "Back-End Development",
+    "Object Oriented Programming [OOP]",
+    "Software Development Life Cycle [SDLC]",
+    "Responsive Web Design",
+    "Problem Solving",
+    "Version Control (Git/GitHub)"
+];
+/**
+ * Use this to give more information about what you are passionate about,
+ * how you best work, or even a quote. This will help someone learn more
+ * about you on a professional level.
+ */ const detailOrQuote = "I am passionate about solving problems in new, creative ways to drive innovation. With a keen eye for detail and a dedication to user-centric design, I continually seek to make technology more accessible and intuitive for all.";
+const About = ()=>{
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("section", {
+        className: "section-about",
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                className: "background",
+                src: (0, _motionBackgroundJpgDefault.default),
+                alt: imageAltText
+            }, void 0, false, {
+                fileName: "src/Components/About.jsx",
+                lineNumber: 55,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                id: "about",
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
+                        className: "about-head",
+                        children: "About Myself"
+                    }, void 0, false, {
+                        fileName: "src/Components/About.jsx",
+                        lineNumber: 57,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                        className: "large",
+                        children: description
+                    }, void 0, false, {
+                        fileName: "src/Components/About.jsx",
+                        lineNumber: 58,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("hr", {}, void 0, false, {
+                        fileName: "src/Components/About.jsx",
+                        lineNumber: 59,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("ul", {
+                        className: "about-list",
+                        children: skillsList.map((skill)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
+                                children: skill
+                            }, skill, false, {
+                                fileName: "src/Components/About.jsx",
+                                lineNumber: 62,
+                                columnNumber: 13
+                            }, undefined))
+                    }, void 0, false, {
+                        fileName: "src/Components/About.jsx",
+                        lineNumber: 60,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("hr", {}, void 0, false, {
+                        fileName: "src/Components/About.jsx",
+                        lineNumber: 65,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                        className: "about-below-quote",
+                        children: detailOrQuote
+                    }, void 0, false, {
+                        fileName: "src/Components/About.jsx",
+                        lineNumber: 66,
+                        columnNumber: 9
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/Components/About.jsx",
+                lineNumber: 56,
+                columnNumber: 7
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "src/Components/About.jsx",
+        lineNumber: 54,
+        columnNumber: 5
+    }, undefined);
+};
+_c = About;
+exports.default = About;
+var _c;
+$RefreshReg$(_c, "About");
+
+  $parcel$ReactRefreshHelpers$17a8.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","../images/motion-background.jpg":"bheKC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"bheKC":[function(require,module,exports) {
+module.exports = require("555c7c7d738bff9a").getBundleURL("UckoE") + "motion-background.0a6a8db0.jpg" + "?" + Date.now();
+
+},{"555c7c7d738bff9a":"lgJ39"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"km3Ru":[function(require,module,exports) {
+"use strict";
+var Refresh = require("7422ead32dcc1e6b");
+function debounce(func, delay) {
+    {
+        let timeout = undefined;
+        let lastTime = 0;
+        return function(args) {
+            // Call immediately if last call was more than the delay ago.
+            // Otherwise, set a timeout. This means the first call is fast
+            // (for the common case of a single update), and subsequent updates
+            // are batched.
+            let now = Date.now();
+            if (now - lastTime > delay) {
+                lastTime = now;
+                func.call(null, args);
+            } else {
+                clearTimeout(timeout);
+                timeout = setTimeout(function() {
+                    timeout = undefined;
+                    lastTime = Date.now();
+                    func.call(null, args);
+                }, delay);
+            }
+        };
+    }
+}
+var enqueueUpdate = debounce(function() {
+    Refresh.performReactRefresh();
+}, 30);
+// Everthing below is either adapted or copied from
+// https://github.com/facebook/metro/blob/61de16bd1edd7e738dd0311c89555a644023ab2d/packages/metro/src/lib/polyfills/require.js
+// MIT License - Copyright (c) Facebook, Inc. and its affiliates.
+module.exports.prelude = function(module1) {
+    window.$RefreshReg$ = function(type, id) {
+        Refresh.register(type, module1.id + " " + id);
+    };
+    window.$RefreshSig$ = Refresh.createSignatureFunctionForTransform;
+};
+module.exports.postlude = function(module1) {
+    if (isReactRefreshBoundary(module1.exports)) {
+        registerExportsForReactRefresh(module1);
+        if (module1.hot) {
+            module1.hot.dispose(function(data) {
+                if (Refresh.hasUnrecoverableErrors()) window.location.reload();
+                data.prevExports = module1.exports;
+            });
+            module1.hot.accept(function(getParents) {
+                var prevExports = module1.hot.data.prevExports;
+                var nextExports = module1.exports;
+                // Since we just executed the code for it, it's possible
+                // that the new exports make it ineligible for being a boundary.
+                var isNoLongerABoundary = !isReactRefreshBoundary(nextExports);
+                // It can also become ineligible if its exports are incompatible
+                // with the previous exports.
+                // For example, if you add/remove/change exports, we'll want
+                // to re-execute the importing modules, and force those components
+                // to re-render. Similarly, if you convert a class component
+                // to a function, we want to invalidate the boundary.
+                var didInvalidate = shouldInvalidateReactRefreshBoundary(prevExports, nextExports);
+                if (isNoLongerABoundary || didInvalidate) {
+                    // We'll be conservative. The only case in which we won't do a full
+                    // reload is if all parent modules are also refresh boundaries.
+                    // In that case we'll add them to the current queue.
+                    var parents = getParents();
+                    if (parents.length === 0) {
+                        // Looks like we bubbled to the root. Can't recover from that.
+                        window.location.reload();
+                        return;
+                    }
+                    return parents;
+                }
+                enqueueUpdate();
+            });
+        }
+    }
+};
+function isReactRefreshBoundary(exports) {
+    if (Refresh.isLikelyComponentType(exports)) return true;
+    if (exports == null || typeof exports !== "object") // Exit if we can't iterate over exports.
+    return false;
+    var hasExports = false;
+    var areAllExportsComponents = true;
+    let isESM = "__esModule" in exports;
+    for(var key in exports){
+        hasExports = true;
+        if (key === "__esModule") continue;
+        var desc = Object.getOwnPropertyDescriptor(exports, key);
+        if (desc && desc.get && !isESM) // Don't invoke getters for CJS as they may have side effects.
+        return false;
+        var exportValue = exports[key];
+        if (!Refresh.isLikelyComponentType(exportValue)) areAllExportsComponents = false;
+    }
+    return hasExports && areAllExportsComponents;
+}
+function shouldInvalidateReactRefreshBoundary(prevExports, nextExports) {
+    var prevSignature = getRefreshBoundarySignature(prevExports);
+    var nextSignature = getRefreshBoundarySignature(nextExports);
+    if (prevSignature.length !== nextSignature.length) return true;
+    for(var i = 0; i < nextSignature.length; i++){
+        if (prevSignature[i] !== nextSignature[i]) return true;
+    }
+    return false;
+}
+// When this signature changes, it's unsafe to stop at this refresh boundary.
+function getRefreshBoundarySignature(exports) {
+    var signature = [];
+    signature.push(Refresh.getFamilyByType(exports));
+    if (exports == null || typeof exports !== "object") // Exit if we can't iterate over exports.
+    // (This is important for legacy environments.)
+    return signature;
+    let isESM = "__esModule" in exports;
+    for(var key in exports){
+        if (key === "__esModule") continue;
+        var desc = Object.getOwnPropertyDescriptor(exports, key);
+        if (desc && desc.get && !isESM) continue;
+        var exportValue = exports[key];
+        signature.push(key);
+        signature.push(Refresh.getFamilyByType(exportValue));
+    }
+    return signature;
+}
+function registerExportsForReactRefresh(module1) {
+    var exports = module1.exports, id = module1.id;
+    Refresh.register(exports, id + " %exports%");
+    if (exports == null || typeof exports !== "object") // Exit if we can't iterate over exports.
+    // (This is important for legacy environments.)
+    return;
+    let isESM = "__esModule" in exports;
+    for(var key in exports){
+        var desc = Object.getOwnPropertyDescriptor(exports, key);
+        if (desc && desc.get && !isESM) continue;
+        var exportValue = exports[key];
+        var typeID = id + " %exports% " + key;
+        Refresh.register(exportValue, typeID);
+    }
+}
+
+},{"7422ead32dcc1e6b":"786KC"}],"7GWgX":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$8b43 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$8b43.prelude(module);
+
+try {
+/**
+ * Footer component
+ *
+ * Displays avenues to contact you.
+ * Contact information is passed in from the App component that
+ * renders the Footer.
+ *
+ * If a social value has an empty string it will not be displayed.
+ */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _propTypes = require("prop-types");
+var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
+var _devdottoSvg = require("../images/socials/devdotto.svg");
+var _devdottoSvgDefault = parcelHelpers.interopDefault(_devdottoSvg);
+var _envelopeSvg = require("../images/socials/envelope.svg");
+var _envelopeSvgDefault = parcelHelpers.interopDefault(_envelopeSvg);
+var _githubSvg = require("../images/socials/github.svg");
+var _githubSvgDefault = parcelHelpers.interopDefault(_githubSvg);
+var _instagramSvg = require("../images/socials/instagram.svg");
+var _instagramSvgDefault = parcelHelpers.interopDefault(_instagramSvg);
+var _linkedinSvg = require("../images/socials/linkedin.svg");
+var _linkedinSvgDefault = parcelHelpers.interopDefault(_linkedinSvg);
+var _mediumSvg = require("../images/socials/medium.svg");
+var _mediumSvgDefault = parcelHelpers.interopDefault(_mediumSvg);
+var _twitterSvg = require("../images/socials/twitter.svg");
+var _twitterSvgDefault = parcelHelpers.interopDefault(_twitterSvg);
+var _youtubeSvg = require("../images/socials/youtube.svg");
+var _youtubeSvgDefault = parcelHelpers.interopDefault(_youtubeSvg);
+/**
+ * 💡 Learning resources
+ *
+ *  HTML hyperlinks: https://www.w3schools.com/html/html_links.asp
+ *  Opening links in new tabs: https://www.freecodecamp.org/news/how-to-use-html-to-open-link-in-new-tab/
+ */ const Footer = (props)=>{
+    const { devDotTo, email, gitHub, instagram, linkedIn, medium, name, primaryColor, twitter, youTube } = props;
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        id: "footer",
+        style: {
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "2.5rem",
+            padding: "5rem 0 3rem",
+            backgroundColor: primaryColor,
+            width: "100vw"
+        },
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                style: {
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: "2.5rem"
+                },
+                children: [
+                    email && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                        href: `mailto:${email}`,
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                            src: (0, _envelopeSvgDefault.default),
+                            alt: "email",
+                            className: "socialIcon"
+                        }, void 0, false, {
+                            fileName: "src/Components/Footer.jsx",
+                            lineNumber: 65,
+                            columnNumber: 13
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/Components/Footer.jsx",
+                        lineNumber: 64,
+                        columnNumber: 11
+                    }, undefined),
+                    devDotTo && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                        href: `https://dev.to/${devDotTo}`,
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                            src: (0, _devdottoSvgDefault.default),
+                            alt: "Dev.to",
+                            className: "socialIcon"
+                        }, void 0, false, {
+                            fileName: "src/Components/Footer.jsx",
+                            lineNumber: 70,
+                            columnNumber: 13
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/Components/Footer.jsx",
+                        lineNumber: 69,
+                        columnNumber: 11
+                    }, undefined),
+                    gitHub && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                        href: `https://github.com/${gitHub}`,
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                            src: (0, _githubSvgDefault.default),
+                            alt: "GitHub",
+                            className: "socialIcon"
+                        }, void 0, false, {
+                            fileName: "src/Components/Footer.jsx",
+                            lineNumber: 75,
+                            columnNumber: 13
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/Components/Footer.jsx",
+                        lineNumber: 74,
+                        columnNumber: 11
+                    }, undefined),
+                    instagram && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                        href: `https://www.instagram.com/${instagram}`,
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                            src: (0, _instagramSvgDefault.default),
+                            alt: "Instagram",
+                            className: "socialIcon"
+                        }, void 0, false, {
+                            fileName: "src/Components/Footer.jsx",
+                            lineNumber: 84,
+                            columnNumber: 13
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/Components/Footer.jsx",
+                        lineNumber: 79,
+                        columnNumber: 11
+                    }, undefined),
+                    linkedIn && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                        href: `https://www.linkedin.com/in/${linkedIn}`,
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                            src: (0, _linkedinSvgDefault.default),
+                            alt: "LinkedIn",
+                            className: "socialIcon"
+                        }, void 0, false, {
+                            fileName: "src/Components/Footer.jsx",
+                            lineNumber: 93,
+                            columnNumber: 13
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/Components/Footer.jsx",
+                        lineNumber: 88,
+                        columnNumber: 11
+                    }, undefined),
+                    medium && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                        href: `https://medium.com/@${medium}`,
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                            src: (0, _mediumSvgDefault.default),
+                            alt: "Medium",
+                            className: "socialIcon"
+                        }, void 0, false, {
+                            fileName: "src/Components/Footer.jsx",
+                            lineNumber: 98,
+                            columnNumber: 13
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/Components/Footer.jsx",
+                        lineNumber: 97,
+                        columnNumber: 11
+                    }, undefined),
+                    twitter && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                        href: `https://twitter.com/${twitter}`,
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                            src: (0, _twitterSvgDefault.default),
+                            alt: "Twitter",
+                            className: "socialIcon"
+                        }, void 0, false, {
+                            fileName: "src/Components/Footer.jsx",
+                            lineNumber: 103,
+                            columnNumber: 13
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/Components/Footer.jsx",
+                        lineNumber: 102,
+                        columnNumber: 11
+                    }, undefined),
+                    youTube && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                        href: `https://www.youtube.com/c/${youTube}`,
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                            src: (0, _youtubeSvgDefault.default),
+                            alt: "YouTube",
+                            className: "socialIcon"
+                        }, void 0, false, {
+                            fileName: "src/Components/Footer.jsx",
+                            lineNumber: 112,
+                            columnNumber: 13
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/Components/Footer.jsx",
+                        lineNumber: 107,
+                        columnNumber: 11
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/Components/Footer.jsx",
+                lineNumber: 56,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                className: "small",
+                style: {
+                    marginTop: 0,
+                    color: "white"
+                },
+                children: [
+                    "Created by ",
+                    name
+                ]
+            }, void 0, true, {
+                fileName: "src/Components/Footer.jsx",
+                lineNumber: 116,
+                columnNumber: 7
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "src/Components/Footer.jsx",
+        lineNumber: 44,
+        columnNumber: 5
+    }, undefined);
+};
+_c = Footer;
+Footer.defaultProps = {
+    name: ""
+};
+Footer.propTypes = {
+    devDotTo: (0, _propTypesDefault.default).string,
+    email: (0, _propTypesDefault.default).string,
+    gitHub: (0, _propTypesDefault.default).string,
+    instagram: (0, _propTypesDefault.default).string,
+    linkedIn: (0, _propTypesDefault.default).string,
+    medium: (0, _propTypesDefault.default).string,
+    name: (0, _propTypesDefault.default).string.isRequired,
+    primaryColor: (0, _propTypesDefault.default).string,
+    twitter: (0, _propTypesDefault.default).string,
+    youTube: (0, _propTypesDefault.default).string
+};
+exports.default = Footer;
+var _c;
+$RefreshReg$(_c, "Footer");
+
+  $parcel$ReactRefreshHelpers$8b43.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","prop-types":"7wKI2","../images/socials/devdotto.svg":"3e7RK","../images/socials/envelope.svg":"26uWO","../images/socials/github.svg":"k7Qiw","../images/socials/instagram.svg":"38Ug0","../images/socials/linkedin.svg":"gDewj","../images/socials/medium.svg":"4UTZr","../images/socials/twitter.svg":"irVHW","../images/socials/youtube.svg":"aALAo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"7wKI2":[function(require,module,exports) {
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ var ReactIs = require("96e34ae03f5a2631");
+// By explicitly using `prop-types` you are opting into new development behavior.
+// http://fb.me/prop-types-in-prod
+var throwOnDirectAccess = true;
+module.exports = require("cb216452e2171041")(ReactIs.isElement, throwOnDirectAccess);
+
+},{"96e34ae03f5a2631":"7EuwB","cb216452e2171041":"bBUgD"}],"7EuwB":[function(require,module,exports) {
+"use strict";
+module.exports = require("2255125a8e8b1051");
+
+},{"2255125a8e8b1051":"5DsXl"}],"5DsXl":[function(require,module,exports) {
+/** @license React v16.13.1
+ * react-is.development.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ "use strict";
+(function() {
+    "use strict";
+    // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
+    // nor polyfill, then a plain number is used for performance.
+    var hasSymbol = typeof Symbol === "function" && Symbol.for;
+    var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for("react.element") : 0xeac7;
+    var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for("react.portal") : 0xeaca;
+    var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for("react.fragment") : 0xeacb;
+    var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for("react.strict_mode") : 0xeacc;
+    var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for("react.profiler") : 0xead2;
+    var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for("react.provider") : 0xeacd;
+    var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for("react.context") : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
+    // (unstable) APIs that have been removed. Can we remove the symbols?
+    var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for("react.async_mode") : 0xeacf;
+    var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for("react.concurrent_mode") : 0xeacf;
+    var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for("react.forward_ref") : 0xead0;
+    var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for("react.suspense") : 0xead1;
+    var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for("react.suspense_list") : 0xead8;
+    var REACT_MEMO_TYPE = hasSymbol ? Symbol.for("react.memo") : 0xead3;
+    var REACT_LAZY_TYPE = hasSymbol ? Symbol.for("react.lazy") : 0xead4;
+    var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for("react.block") : 0xead9;
+    var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for("react.fundamental") : 0xead5;
+    var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for("react.responder") : 0xead6;
+    var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for("react.scope") : 0xead7;
+    function isValidElementType(type) {
+        return typeof type === "string" || typeof type === "function" || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
+        type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === "object" && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
+    }
+    function typeOf(object) {
+        if (typeof object === "object" && object !== null) {
+            var $$typeof = object.$$typeof;
+            switch($$typeof){
+                case REACT_ELEMENT_TYPE:
+                    var type = object.type;
+                    switch(type){
+                        case REACT_ASYNC_MODE_TYPE:
+                        case REACT_CONCURRENT_MODE_TYPE:
+                        case REACT_FRAGMENT_TYPE:
+                        case REACT_PROFILER_TYPE:
+                        case REACT_STRICT_MODE_TYPE:
+                        case REACT_SUSPENSE_TYPE:
+                            return type;
+                        default:
+                            var $$typeofType = type && type.$$typeof;
+                            switch($$typeofType){
+                                case REACT_CONTEXT_TYPE:
+                                case REACT_FORWARD_REF_TYPE:
+                                case REACT_LAZY_TYPE:
+                                case REACT_MEMO_TYPE:
+                                case REACT_PROVIDER_TYPE:
+                                    return $$typeofType;
+                                default:
+                                    return $$typeof;
+                            }
+                    }
+                case REACT_PORTAL_TYPE:
+                    return $$typeof;
+            }
+        }
+        return undefined;
+    } // AsyncMode is deprecated along with isAsyncMode
+    var AsyncMode = REACT_ASYNC_MODE_TYPE;
+    var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
+    var ContextConsumer = REACT_CONTEXT_TYPE;
+    var ContextProvider = REACT_PROVIDER_TYPE;
+    var Element = REACT_ELEMENT_TYPE;
+    var ForwardRef = REACT_FORWARD_REF_TYPE;
+    var Fragment = REACT_FRAGMENT_TYPE;
+    var Lazy = REACT_LAZY_TYPE;
+    var Memo = REACT_MEMO_TYPE;
+    var Portal = REACT_PORTAL_TYPE;
+    var Profiler = REACT_PROFILER_TYPE;
+    var StrictMode = REACT_STRICT_MODE_TYPE;
+    var Suspense = REACT_SUSPENSE_TYPE;
+    var hasWarnedAboutDeprecatedIsAsyncMode = false; // AsyncMode should be deprecated
+    function isAsyncMode(object) {
+        if (!hasWarnedAboutDeprecatedIsAsyncMode) {
+            hasWarnedAboutDeprecatedIsAsyncMode = true; // Using console['warn'] to evade Babel and ESLint
+            console["warn"]("The ReactIs.isAsyncMode() alias has been deprecated, and will be removed in React 17+. Update your code to use ReactIs.isConcurrentMode() instead. It has the exact same API.");
+        }
+        return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
+    }
+    function isConcurrentMode(object) {
+        return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
+    }
+    function isContextConsumer(object) {
+        return typeOf(object) === REACT_CONTEXT_TYPE;
+    }
+    function isContextProvider(object) {
+        return typeOf(object) === REACT_PROVIDER_TYPE;
+    }
+    function isElement(object) {
+        return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+    }
+    function isForwardRef(object) {
+        return typeOf(object) === REACT_FORWARD_REF_TYPE;
+    }
+    function isFragment(object) {
+        return typeOf(object) === REACT_FRAGMENT_TYPE;
+    }
+    function isLazy(object) {
+        return typeOf(object) === REACT_LAZY_TYPE;
+    }
+    function isMemo(object) {
+        return typeOf(object) === REACT_MEMO_TYPE;
+    }
+    function isPortal(object) {
+        return typeOf(object) === REACT_PORTAL_TYPE;
+    }
+    function isProfiler(object) {
+        return typeOf(object) === REACT_PROFILER_TYPE;
+    }
+    function isStrictMode(object) {
+        return typeOf(object) === REACT_STRICT_MODE_TYPE;
+    }
+    function isSuspense(object) {
+        return typeOf(object) === REACT_SUSPENSE_TYPE;
+    }
+    exports.AsyncMode = AsyncMode;
+    exports.ConcurrentMode = ConcurrentMode;
+    exports.ContextConsumer = ContextConsumer;
+    exports.ContextProvider = ContextProvider;
+    exports.Element = Element;
+    exports.ForwardRef = ForwardRef;
+    exports.Fragment = Fragment;
+    exports.Lazy = Lazy;
+    exports.Memo = Memo;
+    exports.Portal = Portal;
+    exports.Profiler = Profiler;
+    exports.StrictMode = StrictMode;
+    exports.Suspense = Suspense;
+    exports.isAsyncMode = isAsyncMode;
+    exports.isConcurrentMode = isConcurrentMode;
+    exports.isContextConsumer = isContextConsumer;
+    exports.isContextProvider = isContextProvider;
+    exports.isElement = isElement;
+    exports.isForwardRef = isForwardRef;
+    exports.isFragment = isFragment;
+    exports.isLazy = isLazy;
+    exports.isMemo = isMemo;
+    exports.isPortal = isPortal;
+    exports.isProfiler = isProfiler;
+    exports.isStrictMode = isStrictMode;
+    exports.isSuspense = isSuspense;
+    exports.isValidElementType = isValidElementType;
+    exports.typeOf = typeOf;
+})();
+
+},{}],"bBUgD":[function(require,module,exports) {
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ "use strict";
+var ReactIs = require("c437388b089702c3");
+var assign = require("c067a60101d8520c");
+var ReactPropTypesSecret = require("74a0f89a70b9f3c2");
+var has = require("18441b11647bc78");
+var checkPropTypes = require("bec3f6ff89f0b072");
+var printWarning = function() {};
+printWarning = function(text) {
+    var message = "Warning: " + text;
+    if (typeof console !== "undefined") console.error(message);
+    try {
+        // --- Welcome to debugging React ---
+        // This error was thrown as a convenience so that you can use this stack
+        // to find the callsite that caused this warning to fire.
+        throw new Error(message);
+    } catch (x) {}
+};
+function emptyFunctionThatReturnsNull() {
+    return null;
+}
+module.exports = function(isValidElement, throwOnDirectAccess) {
+    /* global Symbol */ var ITERATOR_SYMBOL = typeof Symbol === "function" && Symbol.iterator;
+    var FAUX_ITERATOR_SYMBOL = "@@iterator"; // Before Symbol spec.
+    /**
+   * Returns the iterator method function contained on the iterable object.
+   *
+   * Be sure to invoke the function with the iterable as context:
+   *
+   *     var iteratorFn = getIteratorFn(myIterable);
+   *     if (iteratorFn) {
+   *       var iterator = iteratorFn.call(myIterable);
+   *       ...
+   *     }
+   *
+   * @param {?object} maybeIterable
+   * @return {?function}
+   */ function getIteratorFn(maybeIterable) {
+        var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
+        if (typeof iteratorFn === "function") return iteratorFn;
+    }
+    /**
+   * Collection of methods that allow declaration and validation of props that are
+   * supplied to React components. Example usage:
+   *
+   *   var Props = require('ReactPropTypes');
+   *   var MyArticle = React.createClass({
+   *     propTypes: {
+   *       // An optional string prop named "description".
+   *       description: Props.string,
+   *
+   *       // A required enum prop named "category".
+   *       category: Props.oneOf(['News','Photos']).isRequired,
+   *
+   *       // A prop named "dialog" that requires an instance of Dialog.
+   *       dialog: Props.instanceOf(Dialog).isRequired
+   *     },
+   *     render: function() { ... }
+   *   });
+   *
+   * A more formal specification of how these methods are used:
+   *
+   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
+   *   decl := ReactPropTypes.{type}(.isRequired)?
+   *
+   * Each and every declaration produces a function with the same signature. This
+   * allows the creation of custom validation functions. For example:
+   *
+   *  var MyLink = React.createClass({
+   *    propTypes: {
+   *      // An optional string or URI prop named "href".
+   *      href: function(props, propName, componentName) {
+   *        var propValue = props[propName];
+   *        if (propValue != null && typeof propValue !== 'string' &&
+   *            !(propValue instanceof URI)) {
+   *          return new Error(
+   *            'Expected a string or an URI for ' + propName + ' in ' +
+   *            componentName
+   *          );
+   *        }
+   *      }
+   *    },
+   *    render: function() {...}
+   *  });
+   *
+   * @internal
+   */ var ANONYMOUS = "<<anonymous>>";
+    // Important!
+    // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
+    var ReactPropTypes = {
+        array: createPrimitiveTypeChecker("array"),
+        bigint: createPrimitiveTypeChecker("bigint"),
+        bool: createPrimitiveTypeChecker("boolean"),
+        func: createPrimitiveTypeChecker("function"),
+        number: createPrimitiveTypeChecker("number"),
+        object: createPrimitiveTypeChecker("object"),
+        string: createPrimitiveTypeChecker("string"),
+        symbol: createPrimitiveTypeChecker("symbol"),
+        any: createAnyTypeChecker(),
+        arrayOf: createArrayOfTypeChecker,
+        element: createElementTypeChecker(),
+        elementType: createElementTypeTypeChecker(),
+        instanceOf: createInstanceTypeChecker,
+        node: createNodeChecker(),
+        objectOf: createObjectOfTypeChecker,
+        oneOf: createEnumTypeChecker,
+        oneOfType: createUnionTypeChecker,
+        shape: createShapeTypeChecker,
+        exact: createStrictShapeTypeChecker
+    };
+    /**
+   * inlined Object.is polyfill to avoid requiring consumers ship their own
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+   */ /*eslint-disable no-self-compare*/ function is(x, y) {
+        // SameValue algorithm
+        if (x === y) // Steps 1-5, 7-10
+        // Steps 6.b-6.e: +0 != -0
+        return x !== 0 || 1 / x === 1 / y;
+        else // Step 6.a: NaN == NaN
+        return x !== x && y !== y;
+    }
+    /*eslint-enable no-self-compare*/ /**
+   * We use an Error-like object for backward compatibility as people may call
+   * PropTypes directly and inspect their output. However, we don't use real
+   * Errors anymore. We don't inspect their stack anyway, and creating them
+   * is prohibitively expensive if they are created too often, such as what
+   * happens in oneOfType() for any type before the one that matched.
+   */ function PropTypeError(message, data) {
+        this.message = message;
+        this.data = data && typeof data === "object" ? data : {};
+        this.stack = "";
+    }
+    // Make `instanceof Error` still work for returned errors.
+    PropTypeError.prototype = Error.prototype;
+    function createChainableTypeChecker(validate) {
+        var manualPropTypeCallCache = {};
+        var manualPropTypeWarningCount = 0;
+        function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
+            componentName = componentName || ANONYMOUS;
+            propFullName = propFullName || propName;
+            if (secret !== ReactPropTypesSecret) {
+                if (throwOnDirectAccess) {
+                    // New behavior only for users of `prop-types` package
+                    var err = new Error("Calling PropTypes validators directly is not supported by the `prop-types` package. Use `PropTypes.checkPropTypes()` to call them. Read more at http://fb.me/use-check-prop-types");
+                    err.name = "Invariant Violation";
+                    throw err;
+                } else if (typeof console !== "undefined") {
+                    // Old behavior for people using React.PropTypes
+                    var cacheKey = componentName + ":" + propName;
+                    if (!manualPropTypeCallCache[cacheKey] && // Avoid spamming the console because they are often not actionable except for lib authors
+                    manualPropTypeWarningCount < 3) {
+                        printWarning("You are manually calling a React.PropTypes validation function for the `" + propFullName + "` prop on `" + componentName + "`. This is deprecated " + "and will throw in the standalone `prop-types` package. " + "You may be seeing this warning due to a third-party PropTypes " + "library. See https://fb.me/react-warning-dont-call-proptypes " + "for details.");
+                        manualPropTypeCallCache[cacheKey] = true;
+                        manualPropTypeWarningCount++;
+                    }
+                }
+            }
+            if (props[propName] == null) {
+                if (isRequired) {
+                    if (props[propName] === null) return new PropTypeError("The " + location + " `" + propFullName + "` is marked as required " + ("in `" + componentName + "`, but its value is `null`."));
+                    return new PropTypeError("The " + location + " `" + propFullName + "` is marked as required in " + ("`" + componentName + "`, but its value is `undefined`."));
+                }
+                return null;
+            } else return validate(props, propName, componentName, location, propFullName);
+        }
+        var chainedCheckType = checkType.bind(null, false);
+        chainedCheckType.isRequired = checkType.bind(null, true);
+        return chainedCheckType;
+    }
+    function createPrimitiveTypeChecker(expectedType) {
+        function validate(props, propName, componentName, location, propFullName, secret) {
+            var propValue = props[propName];
+            var propType = getPropType(propValue);
+            if (propType !== expectedType) {
+                // `propValue` being instance of, say, date/regexp, pass the 'object'
+                // check, but we can offer a more precise error message here rather than
+                // 'of type `object`'.
+                var preciseType = getPreciseType(propValue);
+                return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + preciseType + "` supplied to `" + componentName + "`, expected ") + ("`" + expectedType + "`."), {
+                    expectedType: expectedType
+                });
+            }
+            return null;
+        }
+        return createChainableTypeChecker(validate);
+    }
+    function createAnyTypeChecker() {
+        return createChainableTypeChecker(emptyFunctionThatReturnsNull);
+    }
+    function createArrayOfTypeChecker(typeChecker) {
+        function validate(props, propName, componentName, location, propFullName) {
+            if (typeof typeChecker !== "function") return new PropTypeError("Property `" + propFullName + "` of component `" + componentName + "` has invalid PropType notation inside arrayOf.");
+            var propValue = props[propName];
+            if (!Array.isArray(propValue)) {
+                var propType = getPropType(propValue);
+                return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected an array."));
+            }
+            for(var i = 0; i < propValue.length; i++){
+                var error = typeChecker(propValue, i, componentName, location, propFullName + "[" + i + "]", ReactPropTypesSecret);
+                if (error instanceof Error) return error;
+            }
+            return null;
+        }
+        return createChainableTypeChecker(validate);
+    }
+    function createElementTypeChecker() {
+        function validate(props, propName, componentName, location, propFullName) {
+            var propValue = props[propName];
+            if (!isValidElement(propValue)) {
+                var propType = getPropType(propValue);
+                return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected a single ReactElement."));
+            }
+            return null;
+        }
+        return createChainableTypeChecker(validate);
+    }
+    function createElementTypeTypeChecker() {
+        function validate(props, propName, componentName, location, propFullName) {
+            var propValue = props[propName];
+            if (!ReactIs.isValidElementType(propValue)) {
+                var propType = getPropType(propValue);
+                return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected a single ReactElement type."));
+            }
+            return null;
+        }
+        return createChainableTypeChecker(validate);
+    }
+    function createInstanceTypeChecker(expectedClass) {
+        function validate(props, propName, componentName, location, propFullName) {
+            if (!(props[propName] instanceof expectedClass)) {
+                var expectedClassName = expectedClass.name || ANONYMOUS;
+                var actualClassName = getClassName(props[propName]);
+                return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + actualClassName + "` supplied to `" + componentName + "`, expected ") + ("instance of `" + expectedClassName + "`."));
+            }
+            return null;
+        }
+        return createChainableTypeChecker(validate);
+    }
+    function createEnumTypeChecker(expectedValues) {
+        if (!Array.isArray(expectedValues)) {
+            {
+                if (arguments.length > 1) printWarning("Invalid arguments supplied to oneOf, expected an array, got " + arguments.length + " arguments. " + "A common mistake is to write oneOf(x, y, z) instead of oneOf([x, y, z]).");
+                else printWarning("Invalid argument supplied to oneOf, expected an array.");
+            }
+            return emptyFunctionThatReturnsNull;
+        }
+        function validate(props, propName, componentName, location, propFullName) {
+            var propValue = props[propName];
+            for(var i = 0; i < expectedValues.length; i++){
+                if (is(propValue, expectedValues[i])) return null;
+            }
+            var valuesString = JSON.stringify(expectedValues, function replacer(key, value) {
+                var type = getPreciseType(value);
+                if (type === "symbol") return String(value);
+                return value;
+            });
+            return new PropTypeError("Invalid " + location + " `" + propFullName + "` of value `" + String(propValue) + "` " + ("supplied to `" + componentName + "`, expected one of " + valuesString + "."));
+        }
+        return createChainableTypeChecker(validate);
+    }
+    function createObjectOfTypeChecker(typeChecker) {
+        function validate(props, propName, componentName, location, propFullName) {
+            if (typeof typeChecker !== "function") return new PropTypeError("Property `" + propFullName + "` of component `" + componentName + "` has invalid PropType notation inside objectOf.");
+            var propValue = props[propName];
+            var propType = getPropType(propValue);
+            if (propType !== "object") return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected an object."));
+            for(var key in propValue)if (has(propValue, key)) {
+                var error = typeChecker(propValue, key, componentName, location, propFullName + "." + key, ReactPropTypesSecret);
+                if (error instanceof Error) return error;
+            }
+            return null;
+        }
+        return createChainableTypeChecker(validate);
+    }
+    function createUnionTypeChecker(arrayOfTypeCheckers) {
+        if (!Array.isArray(arrayOfTypeCheckers)) {
+            printWarning("Invalid argument supplied to oneOfType, expected an instance of array.");
+            return emptyFunctionThatReturnsNull;
+        }
+        for(var i = 0; i < arrayOfTypeCheckers.length; i++){
+            var checker = arrayOfTypeCheckers[i];
+            if (typeof checker !== "function") {
+                printWarning("Invalid argument supplied to oneOfType. Expected an array of check functions, but received " + getPostfixForTypeWarning(checker) + " at index " + i + ".");
+                return emptyFunctionThatReturnsNull;
+            }
+        }
+        function validate(props, propName, componentName, location, propFullName) {
+            var expectedTypes = [];
+            for(var i = 0; i < arrayOfTypeCheckers.length; i++){
+                var checker = arrayOfTypeCheckers[i];
+                var checkerResult = checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret);
+                if (checkerResult == null) return null;
+                if (checkerResult.data && has(checkerResult.data, "expectedType")) expectedTypes.push(checkerResult.data.expectedType);
+            }
+            var expectedTypesMessage = expectedTypes.length > 0 ? ", expected one of type [" + expectedTypes.join(", ") + "]" : "";
+            return new PropTypeError("Invalid " + location + " `" + propFullName + "` supplied to " + ("`" + componentName + "`" + expectedTypesMessage + "."));
+        }
+        return createChainableTypeChecker(validate);
+    }
+    function createNodeChecker() {
+        function validate(props, propName, componentName, location, propFullName) {
+            if (!isNode(props[propName])) return new PropTypeError("Invalid " + location + " `" + propFullName + "` supplied to " + ("`" + componentName + "`, expected a ReactNode."));
+            return null;
+        }
+        return createChainableTypeChecker(validate);
+    }
+    function invalidValidatorError(componentName, location, propFullName, key, type) {
+        return new PropTypeError((componentName || "React class") + ": " + location + " type `" + propFullName + "." + key + "` is invalid; " + "it must be a function, usually from the `prop-types` package, but received `" + type + "`.");
+    }
+    function createShapeTypeChecker(shapeTypes) {
+        function validate(props, propName, componentName, location, propFullName) {
+            var propValue = props[propName];
+            var propType = getPropType(propValue);
+            if (propType !== "object") return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type `" + propType + "` " + ("supplied to `" + componentName + "`, expected `object`."));
+            for(var key in shapeTypes){
+                var checker = shapeTypes[key];
+                if (typeof checker !== "function") return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
+                var error = checker(propValue, key, componentName, location, propFullName + "." + key, ReactPropTypesSecret);
+                if (error) return error;
+            }
+            return null;
+        }
+        return createChainableTypeChecker(validate);
+    }
+    function createStrictShapeTypeChecker(shapeTypes) {
+        function validate(props, propName, componentName, location, propFullName) {
+            var propValue = props[propName];
+            var propType = getPropType(propValue);
+            if (propType !== "object") return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type `" + propType + "` " + ("supplied to `" + componentName + "`, expected `object`."));
+            // We need to check all keys in case some are required but missing from props.
+            var allKeys = assign({}, props[propName], shapeTypes);
+            for(var key in allKeys){
+                var checker = shapeTypes[key];
+                if (has(shapeTypes, key) && typeof checker !== "function") return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
+                if (!checker) return new PropTypeError("Invalid " + location + " `" + propFullName + "` key `" + key + "` supplied to `" + componentName + "`." + "\nBad object: " + JSON.stringify(props[propName], null, "  ") + "\nValid keys: " + JSON.stringify(Object.keys(shapeTypes), null, "  "));
+                var error = checker(propValue, key, componentName, location, propFullName + "." + key, ReactPropTypesSecret);
+                if (error) return error;
+            }
+            return null;
+        }
+        return createChainableTypeChecker(validate);
+    }
+    function isNode(propValue) {
+        switch(typeof propValue){
+            case "number":
+            case "string":
+            case "undefined":
+                return true;
+            case "boolean":
+                return !propValue;
+            case "object":
+                if (Array.isArray(propValue)) return propValue.every(isNode);
+                if (propValue === null || isValidElement(propValue)) return true;
+                var iteratorFn = getIteratorFn(propValue);
+                if (iteratorFn) {
+                    var iterator = iteratorFn.call(propValue);
+                    var step;
+                    if (iteratorFn !== propValue.entries) while(!(step = iterator.next()).done){
+                        if (!isNode(step.value)) return false;
+                    }
+                    else // Iterator will provide entry [k,v] tuples rather than values.
+                    while(!(step = iterator.next()).done){
+                        var entry = step.value;
+                        if (entry) {
+                            if (!isNode(entry[1])) return false;
+                        }
+                    }
+                } else return false;
+                return true;
+            default:
+                return false;
+        }
+    }
+    function isSymbol(propType, propValue) {
+        // Native Symbol.
+        if (propType === "symbol") return true;
+        // falsy value can't be a Symbol
+        if (!propValue) return false;
+        // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
+        if (propValue["@@toStringTag"] === "Symbol") return true;
+        // Fallback for non-spec compliant Symbols which are polyfilled.
+        if (typeof Symbol === "function" && propValue instanceof Symbol) return true;
+        return false;
+    }
+    // Equivalent of `typeof` but with special handling for array and regexp.
+    function getPropType(propValue) {
+        var propType = typeof propValue;
+        if (Array.isArray(propValue)) return "array";
+        if (propValue instanceof RegExp) // Old webkits (at least until Android 4.0) return 'function' rather than
+        // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
+        // passes PropTypes.object.
+        return "object";
+        if (isSymbol(propType, propValue)) return "symbol";
+        return propType;
+    }
+    // This handles more types than `getPropType`. Only used for error messages.
+    // See `createPrimitiveTypeChecker`.
+    function getPreciseType(propValue) {
+        if (typeof propValue === "undefined" || propValue === null) return "" + propValue;
+        var propType = getPropType(propValue);
+        if (propType === "object") {
+            if (propValue instanceof Date) return "date";
+            else if (propValue instanceof RegExp) return "regexp";
+        }
+        return propType;
+    }
+    // Returns a string that is postfixed to a warning about an invalid type.
+    // For example, "undefined" or "of type array"
+    function getPostfixForTypeWarning(value) {
+        var type = getPreciseType(value);
+        switch(type){
+            case "array":
+            case "object":
+                return "an " + type;
+            case "boolean":
+            case "date":
+            case "regexp":
+                return "a " + type;
+            default:
+                return type;
+        }
+    }
+    // Returns class name of the object, if any.
+    function getClassName(propValue) {
+        if (!propValue.constructor || !propValue.constructor.name) return ANONYMOUS;
+        return propValue.constructor.name;
+    }
+    ReactPropTypes.checkPropTypes = checkPropTypes;
+    ReactPropTypes.resetWarningCache = checkPropTypes.resetWarningCache;
+    ReactPropTypes.PropTypes = ReactPropTypes;
+    return ReactPropTypes;
+};
+
+},{"c437388b089702c3":"7EuwB","c067a60101d8520c":"7OXxh","74a0f89a70b9f3c2":"jZTZJ","18441b11647bc78":"fqKuf","bec3f6ff89f0b072":"5VwyJ"}],"7OXxh":[function(require,module,exports) {
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/ "use strict";
+/* eslint-disable no-unused-vars */ var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+function toObject(val) {
+    if (val === null || val === undefined) throw new TypeError("Object.assign cannot be called with null or undefined");
+    return Object(val);
+}
+function shouldUseNative() {
+    try {
+        if (!Object.assign) return false;
+        // Detect buggy property enumeration order in older V8 versions.
+        // https://bugs.chromium.org/p/v8/issues/detail?id=4118
+        var test1 = new String("abc"); // eslint-disable-line no-new-wrappers
+        test1[5] = "de";
+        if (Object.getOwnPropertyNames(test1)[0] === "5") return false;
+        // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+        var test2 = {};
+        for(var i = 0; i < 10; i++)test2["_" + String.fromCharCode(i)] = i;
+        var order2 = Object.getOwnPropertyNames(test2).map(function(n) {
+            return test2[n];
+        });
+        if (order2.join("") !== "0123456789") return false;
+        // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+        var test3 = {};
+        "abcdefghijklmnopqrst".split("").forEach(function(letter) {
+            test3[letter] = letter;
+        });
+        if (Object.keys(Object.assign({}, test3)).join("") !== "abcdefghijklmnopqrst") return false;
+        return true;
+    } catch (err) {
+        // We don't expect any of the above to throw, but better to be safe.
+        return false;
+    }
+}
+module.exports = shouldUseNative() ? Object.assign : function(target, source) {
+    var from;
+    var to = toObject(target);
+    var symbols;
+    for(var s = 1; s < arguments.length; s++){
+        from = Object(arguments[s]);
+        for(var key in from)if (hasOwnProperty.call(from, key)) to[key] = from[key];
+        if (getOwnPropertySymbols) {
+            symbols = getOwnPropertySymbols(from);
+            for(var i = 0; i < symbols.length; i++)if (propIsEnumerable.call(from, symbols[i])) to[symbols[i]] = from[symbols[i]];
+        }
+    }
+    return to;
+};
+
+},{}],"jZTZJ":[function(require,module,exports) {
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ "use strict";
+var ReactPropTypesSecret = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
+module.exports = ReactPropTypesSecret;
+
+},{}],"fqKuf":[function(require,module,exports) {
+module.exports = Function.call.bind(Object.prototype.hasOwnProperty);
+
+},{}],"5VwyJ":[function(require,module,exports) {
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ "use strict";
+var printWarning = function() {};
+var ReactPropTypesSecret = require("24ba1e58d167a82c");
+var loggedTypeFailures = {};
+var has = require("898bc82f39d83f7c");
+printWarning = function(text) {
+    var message = "Warning: " + text;
+    if (typeof console !== "undefined") console.error(message);
+    try {
+        // --- Welcome to debugging React ---
+        // This error was thrown as a convenience so that you can use this stack
+        // to find the callsite that caused this warning to fire.
+        throw new Error(message);
+    } catch (x) {}
+};
+/**
+ * Assert that the values match with the type specs.
+ * Error messages are memorized and will only be shown once.
+ *
+ * @param {object} typeSpecs Map of name to a ReactPropType
+ * @param {object} values Runtime values that need to be type-checked
+ * @param {string} location e.g. "prop", "context", "child context"
+ * @param {string} componentName Name of the component for error messages.
+ * @param {?Function} getStack Returns the component stack.
+ * @private
+ */ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
+    for(var typeSpecName in typeSpecs)if (has(typeSpecs, typeSpecName)) {
+        var error;
+        // Prop type validation may throw. In case they do, we don't want to
+        // fail the render phase where it didn't fail before. So we log it.
+        // After these have been cleaned up, we'll let them throw.
+        try {
+            // This is intentionally an invariant that gets caught. It's the same
+            // behavior as without this statement except with a better message.
+            if (typeof typeSpecs[typeSpecName] !== "function") {
+                var err = Error((componentName || "React class") + ": " + location + " type `" + typeSpecName + "` is invalid; " + "it must be a function, usually from the `prop-types` package, but received `" + typeof typeSpecs[typeSpecName] + "`." + "This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.");
+                err.name = "Invariant Violation";
+                throw err;
+            }
+            error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
+        } catch (ex) {
+            error = ex;
+        }
+        if (error && !(error instanceof Error)) printWarning((componentName || "React class") + ": type specification of " + location + " `" + typeSpecName + "` is invalid; the type checker " + "function must return `null` or an `Error` but returned a " + typeof error + ". " + "You may have forgotten to pass an argument to the type checker " + "creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and " + "shape all require an argument).");
+        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
+            // Only monitor this failure once because there tends to be a lot of the
+            // same error.
+            loggedTypeFailures[error.message] = true;
+            var stack = getStack ? getStack() : "";
+            printWarning("Failed " + location + " type: " + error.message + (stack != null ? stack : ""));
+        }
+    }
+}
+/**
+ * Resets warning cache when testing.
+ *
+ * @private
+ */ checkPropTypes.resetWarningCache = function() {
+    loggedTypeFailures = {};
+};
+module.exports = checkPropTypes;
+
+},{"24ba1e58d167a82c":"jZTZJ","898bc82f39d83f7c":"fqKuf"}],"3e7RK":[function(require,module,exports) {
+module.exports = require("2ffeff01685491d3").getBundleURL("UckoE") + "devdotto.3bb7afaf.svg" + "?" + Date.now();
+
+},{"2ffeff01685491d3":"lgJ39"}],"26uWO":[function(require,module,exports) {
+module.exports = require("b4392dc7548d0ff").getBundleURL("UckoE") + "envelope.5e5e1d9e.svg" + "?" + Date.now();
+
+},{"b4392dc7548d0ff":"lgJ39"}],"k7Qiw":[function(require,module,exports) {
+module.exports = require("661e10934dc3ecf").getBundleURL("UckoE") + "github.51e0fbb2.svg" + "?" + Date.now();
+
+},{"661e10934dc3ecf":"lgJ39"}],"38Ug0":[function(require,module,exports) {
+module.exports = require("563bb99f3b2e1a32").getBundleURL("UckoE") + "instagram.84def2ad.svg" + "?" + Date.now();
+
+},{"563bb99f3b2e1a32":"lgJ39"}],"gDewj":[function(require,module,exports) {
+module.exports = require("afe7d7ace3bf44e5").getBundleURL("UckoE") + "linkedin.49c2dcdf.svg" + "?" + Date.now();
+
+},{"afe7d7ace3bf44e5":"lgJ39"}],"4UTZr":[function(require,module,exports) {
+module.exports = require("548159601509ed8f").getBundleURL("UckoE") + "medium.6232db8b.svg" + "?" + Date.now();
+
+},{"548159601509ed8f":"lgJ39"}],"irVHW":[function(require,module,exports) {
+module.exports = require("e786ee133321050e").getBundleURL("UckoE") + "twitter.7541cc84.svg" + "?" + Date.now();
+
+},{"e786ee133321050e":"lgJ39"}],"aALAo":[function(require,module,exports) {
+module.exports = require("4983ff6a5ec37543").getBundleURL("UckoE") + "youtube.c3557793.svg" + "?" + Date.now();
+
+},{"4983ff6a5ec37543":"lgJ39"}],"9Dt2F":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$2a62 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$2a62.prelude(module);
+
+try {
+/**
+ * Header component
+ *
+ * Top navigation bar for your site. Set to remain visible as the
+ * user scrolls so that they can constantly reach any part of your page.
+ */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+const Header = ()=>{
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "header-div",
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                href: "#home",
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("strong", {
+                    children: "Home"
+                }, void 0, false, {
+                    fileName: "src/Components/Header.jsx",
+                    lineNumber: 12,
+                    columnNumber: 23
+                }, undefined)
+            }, void 0, false, {
+                fileName: "src/Components/Header.jsx",
+                lineNumber: 12,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                href: "#about",
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("strong", {
+                    children: "About"
+                }, void 0, false, {
+                    fileName: "src/Components/Header.jsx",
+                    lineNumber: 13,
+                    columnNumber: 24
+                }, undefined)
+            }, void 0, false, {
+                fileName: "src/Components/Header.jsx",
+                lineNumber: 13,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                href: "#portfolio",
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("strong", {
+                    children: "Portfolio"
+                }, void 0, false, {
+                    fileName: "src/Components/Header.jsx",
+                    lineNumber: 14,
+                    columnNumber: 28
+                }, undefined)
+            }, void 0, false, {
+                fileName: "src/Components/Header.jsx",
+                lineNumber: 14,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                href: "#footer",
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("strong", {
+                    children: "Contact"
+                }, void 0, false, {
+                    fileName: "src/Components/Header.jsx",
+                    lineNumber: 15,
+                    columnNumber: 25
+                }, undefined)
+            }, void 0, false, {
+                fileName: "src/Components/Header.jsx",
+                lineNumber: 15,
+                columnNumber: 7
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "src/Components/Header.jsx",
+        lineNumber: 11,
+        columnNumber: 5
+    }, undefined);
+};
+_c = Header;
+exports.default = Header;
+var _c;
+$RefreshReg$(_c, "Header");
+
+  $parcel$ReactRefreshHelpers$2a62.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"jIEVO":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$0d4d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$0d4d.prelude(module);
+
+try {
+/**
+ * Home component
+ *
+ * The section at the top of the page to display image of your
+ * choice, name and title that describes your career focus.
+ */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _downArrowSvg = require("../images/down-arrow.svg");
+var _downArrowSvgDefault = parcelHelpers.interopDefault(_downArrowSvg);
+var _propTypes = require("prop-types");
+var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
+/**
+ * Home background image
+ *
+ * Below is a sample image. Upload the image of your choice into the "images"
+ * directory and import here for use. Then, set imageAltText to string that 
+ * represents what you see in that image.
+ *
+ *
+ * Need an image? Check out https://unsplash.com to download a photo you
+ * freely use on your site.
+ */ var _ajBgImgJpg = require("../images/Aj-BgImg.jpg");
+var _ajBgImgJpgDefault = parcelHelpers.interopDefault(_ajBgImgJpg);
+const imageAltText = "Aagam Golechha Sitting on a Rock with an Awesome Sunrise in BackGround";
+const Home = ({ name, title })=>{
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("section", {
+        id: "home",
+        className: "min-height",
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                className: "background",
+                src: (0, _ajBgImgJpgDefault.default),
+                alt: imageAltText
+            }, void 0, false, {
+                fileName: "src/Components/Home.jsx",
+                lineNumber: 30,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "my-name",
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
+                        children: name
+                    }, void 0, false, {
+                        fileName: "src/Components/Home.jsx",
+                        lineNumber: 32,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
+                        children: title
+                    }, void 0, false, {
+                        fileName: "src/Components/Home.jsx",
+                        lineNumber: 33,
+                        columnNumber: 9
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/Components/Home.jsx",
+                lineNumber: 31,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "down-arrow",
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                    href: "#about",
+                    children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                        src: (0, _downArrowSvgDefault.default),
+                        alt: "Down-Arrow"
+                    }, void 0, false, {
+                        fileName: "src/Components/Home.jsx",
+                        lineNumber: 37,
+                        columnNumber: 11
+                    }, undefined)
+                }, void 0, false, {
+                    fileName: "src/Components/Home.jsx",
+                    lineNumber: 36,
+                    columnNumber: 9
+                }, undefined)
+            }, void 0, false, {
+                fileName: "src/Components/Home.jsx",
+                lineNumber: 35,
+                columnNumber: 7
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "src/Components/Home.jsx",
+        lineNumber: 29,
+        columnNumber: 5
+    }, undefined);
+};
+_c = Home;
+Home.defaultProps = {
+    name: "",
+    title: ""
+};
+Home.propTypes = {
+    name: (0, _propTypesDefault.default).string.isRequired,
+    title: (0, _propTypesDefault.default).string.isRequired
+};
+exports.default = Home;
+var _c;
+$RefreshReg$(_c, "Home");
+
+  $parcel$ReactRefreshHelpers$0d4d.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","../images/down-arrow.svg":"fHMBx","prop-types":"7wKI2","../images/Aj-BgImg.jpg":"iZMCB","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"fHMBx":[function(require,module,exports) {
+module.exports = require("45d5e48e11cabde3").getBundleURL("UckoE") + "down-arrow.1037091f.svg" + "?" + Date.now();
+
+},{"45d5e48e11cabde3":"lgJ39"}],"iZMCB":[function(require,module,exports) {
+module.exports = require("83d9a6eb2bb5a6e").getBundleURL("UckoE") + "Aj-BgImg.94f62ac5.jpg" + "?" + Date.now();
+
+},{"83d9a6eb2bb5a6e":"lgJ39"}],"lCaEt":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$ed0d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$ed0d.prelude(module);
+
+try {
+/**
+ * Portfolio component
+ *
+ * Highlights some of  your creations. These can be designs, websites,
+ * open source contributions, articles you've written and more.
+ *
+ * This is a great area for you to to continually add to and refine
+ * as you continue to learn and create.
+ */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+/**
+ * Desk image
+ *
+ * Below is a sample desk image. Feel free to update this to an image of your choice,
+ * updating below imageAltText to string that represents what you see in that image.
+ *
+ * Need an image? Check out https://unsplash.com to download a photo you
+ * freely use on your site.
+ */ var _designDeskJpeg = require("../images/design-desk.jpeg");
+var _designDeskJpegDefault = parcelHelpers.interopDefault(_designDeskJpeg);
+const imageAltText = "Desktop with Books and Laptop";
+/**
+ * Project list
+ *
+ * An array of objects that will be used to display for your project
+ * links section. Below is a sample, update to reflect links you'd like to highlight.
+ */ const projectList = [
+    {
+        title: "FOOD - HUB",
+        description: "Developed a Dynamic food application using ReactJS, featuring a curated restaurant listing and interactive pages for detailed Menus.",
+        url: "https://github.com/AagamAJ/Food-Hub"
+    },
+    {
+        title: "NEWS WEB-PAGE",
+        description: "Implemented a user-friendly interface that fetches and loads current news from various sources utilizing API endpoints.",
+        url: "https://github.com/AagamAJ/Dynamic-News-WebPage"
+    },
+    {
+        title: "MY RESUME SITE",
+        description: "Created using technologies such as HTML and CSS, and deployed to GitHub pages. Includes my Expertise and Problem Solving Abilities.",
+        url: "https://aagam-resume.netlify.app/"
+    },
+    {
+        title: "MY - PORTFOLIO",
+        description: "I've crafted my portfolio website using React.js and JSX, blending my coding prowess with design expertise, in a visually appealing and interactive manner.",
+        url: "https://aagamjain-portfolio.netlify.app/"
+    }
+];
+const Portfolio = ()=>{
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("section", {
+        className: "padding",
+        id: "portfolio",
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
+                className: "portfolio-head",
+                children: "Portfolio"
+            }, void 0, false, {
+                fileName: "src/Components/Portfolio.jsx",
+                lineNumber: 62,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "portfolio-big-container",
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                        className: "portfolio-image",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                            src: (0, _designDeskJpegDefault.default),
+                            alt: imageAltText
+                        }, void 0, false, {
+                            fileName: "src/Components/Portfolio.jsx",
+                            lineNumber: 65,
+                            columnNumber: 11
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/Components/Portfolio.jsx",
+                        lineNumber: 64,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                        className: "container",
+                        children: projectList.map((project)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "box",
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
+                                        href: project.url,
+                                        target: "_blank",
+                                        rel: "noopener noreferrer",
+                                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
+                                            className: "project-title",
+                                            children: project.title
+                                        }, void 0, false, {
+                                            fileName: "src/Components/Portfolio.jsx",
+                                            lineNumber: 74,
+                                            columnNumber: 17
+                                        }, undefined)
+                                    }, void 0, false, {
+                                        fileName: "src/Components/Portfolio.jsx",
+                                        lineNumber: 73,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                        className: "small",
+                                        children: project.description
+                                    }, void 0, false, {
+                                        fileName: "src/Components/Portfolio.jsx",
+                                        lineNumber: 76,
+                                        columnNumber: 15
+                                    }, undefined)
+                                ]
+                            }, project.title, true, {
+                                fileName: "src/Components/Portfolio.jsx",
+                                lineNumber: 72,
+                                columnNumber: 13
+                            }, undefined))
+                    }, void 0, false, {
+                        fileName: "src/Components/Portfolio.jsx",
+                        lineNumber: 70,
+                        columnNumber: 9
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/Components/Portfolio.jsx",
+                lineNumber: 63,
+                columnNumber: 7
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "src/Components/Portfolio.jsx",
+        lineNumber: 61,
+        columnNumber: 5
+    }, undefined);
+};
+_c = Portfolio;
+exports.default = Portfolio;
+var _c;
+$RefreshReg$(_c, "Portfolio");
+
+  $parcel$ReactRefreshHelpers$ed0d.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","../images/design-desk.jpeg":"2Gdds","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"2Gdds":[function(require,module,exports) {
+module.exports = require("fecab343ecaea03c").getBundleURL("UckoE") + "design-desk.df4cd0cf.jpeg" + "?" + Date.now();
+
+},{"fecab343ecaea03c":"lgJ39"}],"j6uA9":[function(require,module,exports) {
 "use strict";
 function checkDCE() {
     /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */ if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined" || typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE !== "function") return;
@@ -3758,9 +5629,9 @@ function checkDCE() {
     // a false positive.
     throw new Error("^_^");
 }
-module.exports = require("./cjs/react-dom.development.js");
+module.exports = require("b0f0e6b9e8349dac");
 
-},{"./cjs/react-dom.development.js":"3iA9v"}],"3iA9v":[function(require,module,exports) {
+},{"b0f0e6b9e8349dac":"3iA9v"}],"3iA9v":[function(require,module,exports) {
 /**
  * @license React
  * react-dom.development.js
@@ -3773,8 +5644,8 @@ module.exports = require("./cjs/react-dom.development.js");
 (function() {
     "use strict";
     /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */ if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
-    var React = require("react");
-    var Scheduler = require("scheduler");
+    var React = require("6f0162e9ab224cd4");
+    var Scheduler = require("8ad4ca65319d28a7");
     var ReactSharedInternals = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
     var suppressWarning = false;
     function setSuppressWarning(newSuppressWarning) {
@@ -3994,7 +5865,7 @@ module.exports = require("./cjs/react-dom.development.js");
     var NUMERIC = 5; // An attribute that must be positive numeric or parse as a positive numeric.
     // When falsy, it should be removed.
     var POSITIVE_NUMERIC = 6;
-    /* eslint-disable max-len */ var ATTRIBUTE_NAME_START_CHAR = ":A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD";
+    /* eslint-disable max-len */ var ATTRIBUTE_NAME_START_CHAR = ":A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD";
     /* eslint-enable max-len */ var ATTRIBUTE_NAME_CHAR = ATTRIBUTE_NAME_START_CHAR + "\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040";
     var VALID_ATTRIBUTE_NAME_REGEX = new RegExp("^[" + ATTRIBUTE_NAME_START_CHAR + "][" + ATTRIBUTE_NAME_CHAR + "]*$");
     var illegalAttributeNameCache = {};
@@ -4590,16 +6461,16 @@ module.exports = require("./cjs/react-dom.development.js");
                 } else {
                     try {
                         Fake.call();
-                    } catch (x1) {
-                        control = x1;
+                    } catch (x) {
+                        control = x;
                     }
                     fn.call(Fake.prototype);
                 }
             } else {
                 try {
                     throw Error();
-                } catch (x2) {
-                    control = x2;
+                } catch (x) {
+                    control = x;
                 }
                 fn();
             }
@@ -5075,7 +6946,8 @@ module.exports = require("./cjs/react-dom.development.js");
         var type = props.type;
         if (value != null) {
             if (type === "number") {
-                if (value === 0 && node.value === "" || // eslint-disable-next-line
+                if (value === 0 && node.value === "" || // We explicitly want to coerce to number here if possible.
+                // eslint-disable-next-line
                 node.value != value) node.value = toString(value);
             } else if (node.value !== toString(value)) node.value = toString(value);
         } else if (type === "submit" || type === "reset") {
@@ -7778,12 +9650,14 @@ module.exports = require("./cjs/react-dom.development.js");
          // If we're already in the middle of a render, switching lanes will interrupt
         // it and we'll lose our progress. We should only do this if the new lanes are
         // higher priority.
-        if (wipLanes !== NoLanes && wipLanes !== nextLanes && // bother waiting until the root is complete.
+        if (wipLanes !== NoLanes && wipLanes !== nextLanes && // If we already suspended with a delay, then interrupting is fine. Don't
+        // bother waiting until the root is complete.
         (wipLanes & suspendedLanes) === NoLanes) {
             var nextLane = getHighestPriorityLane(nextLanes);
             var wipLane = getHighestPriorityLane(wipLanes);
             if (// one. This works because the bits decrease in priority as you go left.
-            nextLane >= wipLane || // only difference between default updates and transition updates is that
+            nextLane >= wipLane || // Default priority updates should not interrupt transition updates. The
+            // only difference between default updates and transition updates is that
             // default updates do not support refresh transitions.
             nextLane === DefaultLane && (wipLane & TransitionLanes) !== NoLanes) // Keep working on the existing in-progress tree. Do not interrupt.
             return wipLanes;
@@ -8098,7 +9972,8 @@ module.exports = require("./cjs/react-dom.development.js");
         while(lanes){
             var index = pickArbitraryLaneIndex(lanes);
             var lane = 1 << index;
-            if (lane & entangledLanes | entanglements[index] & entangledLanes) entanglements[index] |= entangledLanes;
+            if (lane & entangledLanes | // Is this lane transitively entangled with the newly entangled lanes?
+            entanglements[index] & entangledLanes) entanglements[index] |= entangledLanes;
             lanes &= ~lane;
         }
     }
@@ -9268,7 +11143,8 @@ module.exports = require("./cjs/react-dom.development.js");
  * This is required because Firefox fires `keypress` events for key commands
  * (cut, copy, select-all, etc.) even though no character is inserted.
  */ function isKeypressCommand(nativeEvent) {
-        return (nativeEvent.ctrlKey || nativeEvent.altKey || nativeEvent.metaKey) && !(nativeEvent.ctrlKey && nativeEvent.altKey);
+        return (nativeEvent.ctrlKey || nativeEvent.altKey || nativeEvent.metaKey) && // ctrlKey && altKey is equivalent to AltGr, and is not a command.
+        !(nativeEvent.ctrlKey && nativeEvent.altKey);
     }
     /**
  * Translate native top level events into event types.
@@ -10489,7 +12365,8 @@ module.exports = require("./cjs/react-dom.development.js");
         // In the past, React has always bubbled them, but this can be surprising.
         // We're going to try aligning closer to the browser behavior by not bubbling
         // them in React either. We'll start by not bubbling onScroll, and then expand.
-        var accumulateTargetOnly = !inCapturePhase && // nonDelegatedEvents list in DOMPluginEventSystem.
+        var accumulateTargetOnly = !inCapturePhase && // TODO: ideally, we'd eventually add all events from
+        // nonDelegatedEvents list in DOMPluginEventSystem.
         // Then we can remove this special list.
         // This is a breaking change that can wait until React 18.
         domEventName === "scroll";
@@ -11428,12 +13305,14 @@ module.exports = require("./cjs/react-dom.development.js");
                     if (typeof nextProp !== "function") warnForInvalidEventListener(propKey, nextProp);
                     if (propKey === "onScroll") listenToNonDelegatedEvent("scroll", domElement);
                 }
-            } else if (shouldWarnDev && true && typeof isCustomComponentTag === "boolean") {
+            } else if (shouldWarnDev && true && // Convince Flow we've calculated it (it's DEV-only in this method.)
+            typeof isCustomComponentTag === "boolean") {
                 // Validate that the properties correspond to their expected values.
                 var serverValue = void 0;
                 var propertyInfo = isCustomComponentTag && enableCustomElementPropertySupport ? null : getPropertyInfo(propKey);
                 if (rawProps[SUPPRESS_HYDRATION_WARNING] === true) ;
-                else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING || // TODO: Only ignore them on controlled tags.
+                else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING || // Controlled attributes are not validated
+                // TODO: Only ignore them on controlled tags.
                 propKey === "value" || propKey === "checked" || propKey === "selected") ;
                 else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
                     var serverHTML = domElement.innerHTML;
@@ -12114,6 +13993,8 @@ module.exports = require("./cjs/react-dom.development.js");
         retryIfBlockedOn(container);
     }
     function hideInstance(instance) {
+        // TODO: Does this work for all element types? What about MathML? Should we
+        // pass host context to this method?
         instance;
         var style = instance.style;
         if (typeof style.setProperty === "function") style.setProperty("display", "none", "important");
@@ -13248,7 +15129,8 @@ module.exports = require("./cjs/react-dom.development.js");
     ReactStrictModeWarnings.recordUnsafeLifecycleWarnings = function(fiber, instance) {
         // Dedupe strategy: Warn once per component.
         if (didWarnAboutUnsafeLifecycles.has(fiber.type)) return;
-        if (typeof instance.componentWillMount === "function" && instance.componentWillMount.__suppressDeprecationWarning !== true) pendingComponentWillMountWarnings.push(fiber);
+        if (typeof instance.componentWillMount === "function" && // Don't warn about react-lifecycles-compat polyfilled components.
+        instance.componentWillMount.__suppressDeprecationWarning !== true) pendingComponentWillMountWarnings.push(fiber);
         if (fiber.mode & StrictLegacyMode && typeof instance.UNSAFE_componentWillMount === "function") pendingUNSAFE_ComponentWillMountWarnings.push(fiber);
         if (typeof instance.componentWillReceiveProps === "function" && instance.componentWillReceiveProps.__suppressDeprecationWarning !== true) pendingComponentWillReceivePropsWarnings.push(fiber);
         if (fiber.mode & StrictLegacyMode && typeof instance.UNSAFE_componentWillReceiveProps === "function") pendingUNSAFE_ComponentWillReceivePropsWarnings.push(fiber);
@@ -13953,7 +15835,8 @@ module.exports = require("./cjs/react-dom.development.js");
                     } // Process this update.
                     newState = getStateFromUpdate(workInProgress, queue, update, newState, props, instance);
                     var callback = update.callback;
-                    if (callback !== null && // callback again.
+                    if (callback !== null && // If the update was already committed, we should not queue its
+                    // callback again.
                     update.lane !== NoLane) {
                         workInProgress.flags |= Callback;
                         var effects = queue.effects;
@@ -14472,7 +16355,8 @@ module.exports = require("./cjs/react-dom.development.js");
             applyDerivedStateFromProps(workInProgress, ctor, getDerivedStateFromProps, newProps);
             newState = workInProgress.memoizedState;
         }
-        var shouldUpdate = checkHasForceUpdateAfterProcessing() || checkShouldComponentUpdate(workInProgress, ctor, oldProps, newProps, oldState, newState, nextContext) || // both before and after `shouldComponentUpdate` has been called. Not ideal,
+        var shouldUpdate = checkHasForceUpdateAfterProcessing() || checkShouldComponentUpdate(workInProgress, ctor, oldProps, newProps, oldState, newState, nextContext) || // TODO: In some cases, we'll end up checking if context has changed twice,
+        // both before and after `shouldComponentUpdate` has been called. Not ideal,
         // but I'm loath to refactor this function. This only happens for memoized
         // components so it's not that common.
         enableLazyContextPropagation;
@@ -14534,7 +16418,8 @@ module.exports = require("./cjs/react-dom.development.js");
         if (mixedRef !== null && typeof mixedRef !== "function" && typeof mixedRef !== "object") {
             // TODO: Clean this up once we turn on the string ref warning for
             // everyone, because the strict mode case will no longer be relevant
-            if ((returnFiber.mode & StrictLegacyMode || warnAboutStringRefs) && // because these cannot be automatically converted to an arrow function
+            if ((returnFiber.mode & StrictLegacyMode || warnAboutStringRefs) && // We warn in ReactElement.js if owner and self are equal for string refs
+            // because these cannot be automatically converted to an arrow function
             // using a codemod. Therefore, we don't have to warn about string refs again.
             !(element._owner && element._self && element._owner.stateNode !== element._self)) {
                 var componentName = getComponentNameFromFiber(returnFiber) || "Component";
@@ -14682,7 +16567,8 @@ module.exports = require("./cjs/react-dom.development.js");
             var elementType = element.type;
             if (elementType === REACT_FRAGMENT_TYPE) return updateFragment(returnFiber, current, element.props.children, lanes, element.key);
             if (current !== null) {
-                if (current.elementType === elementType || isCompatibleFamilyForHotReloading(current, element) || // We need to do this after the Hot Reloading check above,
+                if (current.elementType === elementType || isCompatibleFamilyForHotReloading(current, element) || // Lazy types should reconcile their resolved type.
+                // We need to do this after the Hot Reloading check above,
                 // because hot reloading has different semantics than prod because
                 // it doesn't resuspend. So we can't let the call below suspend.
                 typeof elementType === "object" && elementType !== null && elementType.$$typeof === REACT_LAZY_TYPE && resolveLazy(elementType) === current.type) {
@@ -14841,7 +16727,7 @@ module.exports = require("./cjs/react-dom.development.js");
                         knownKeys.add(key);
                         break;
                     }
-                    error("Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.", key);
+                    error("Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted \u2014 the behavior is unsupported and could change in a future version.", key);
                     break;
                 case REACT_LAZY_TYPE:
                     var payload = child._payload;
@@ -14956,7 +16842,8 @@ module.exports = require("./cjs/react-dom.development.js");
             if (typeof iteratorFn !== "function") throw new Error("An object is not an iterable. This error is likely caused by a bug in React. Please file an issue.");
             // We don't support rendering Generators because it's a mutation.
             // See https://github.com/facebook/react/issues/12995
-            if (typeof Symbol === "function" && newChildrenIterable[Symbol.toStringTag] === "Generator") {
+            if (typeof Symbol === "function" && // $FlowFixMe Flow doesn't know about toStringTag
+            newChildrenIterable[Symbol.toStringTag] === "Generator") {
                 if (!didWarnAboutGenerators) error("Using Generators as children is unsupported and will likely yield unexpected results because enumerating a generator mutates it. You may convert it to an array with `Array.from()` or the `[...spread]` operator before rendering. Keep in mind you might need to polyfill these features for older browsers.");
                 didWarnAboutGenerators = true;
             } // Warn about using Maps as children
@@ -15102,7 +16989,8 @@ module.exports = require("./cjs/react-dom.development.js");
                             existing._debugOwner = element._owner;
                             return existing;
                         }
-                    } else if (child.elementType === elementType || isCompatibleFamilyForHotReloading(child, element) || // We need to do this after the Hot Reloading check above,
+                    } else if (child.elementType === elementType || isCompatibleFamilyForHotReloading(child, element) || // Lazy types should reconcile their resolved type.
+                    // We need to do this after the Hot Reloading check above,
                     // because hot reloading has different semantics than prod because
                     // it doesn't resuspend. So we can't let the call below suspend.
                     typeof elementType === "object" && elementType !== null && elementType.$$typeof === REACT_LAZY_TYPE && resolveLazy(elementType) === child.type) {
@@ -15319,7 +17207,8 @@ module.exports = require("./cjs/react-dom.development.js");
                     var dehydrated = state.dehydrated;
                     if (dehydrated === null || isSuspenseInstancePending(dehydrated) || isSuspenseInstanceFallback(dehydrated)) return node;
                 }
-            } else if (node.tag === SuspenseListComponent && // keep track of whether it suspended or not.
+            } else if (node.tag === SuspenseListComponent && // revealOrder undefined can't be trusted because it don't
+            // keep track of whether it suspended or not.
             node.memoizedProps.revealOrder !== undefined) {
                 var didSuspend = (node.flags & DidCapture) !== NoFlags;
                 if (didSuspend) return node;
@@ -15512,7 +17401,8 @@ module.exports = require("./cjs/react-dom.development.js");
         // render. If this fires, it suggests that we incorrectly reset the static
         // flags in some other part of the codebase. This has happened before, for
         // example, in the SuspenseList implementation.
-        if (current !== null && (current.flags & StaticMask) !== (workInProgress.flags & StaticMask) && // and creates false positives. To make this work in legacy mode, we'd
+        if (current !== null && (current.flags & StaticMask) !== (workInProgress.flags & StaticMask) && // Disable this warning in legacy mode, because legacy Suspense is weird
+        // and creates false positives. To make this work in legacy mode, we'd
         // need to mark fibers that commit in an incomplete state, somehow. For
         // now I'll disable the warning that most of the bugs that would trigger
         // it are either exclusive to concurrent mode or exist in both.
@@ -15883,7 +17773,8 @@ module.exports = require("./cjs/react-dom.development.js");
         // commit phase if there was an interleaved mutation. In concurrent mode
         // this can happen all the time, but even in synchronous mode, an earlier
         // effect may have mutated the store.
-        if (inst.getSnapshot !== getSnapshot || snapshotChanged || // checking whether we scheduled a subscription effect above.
+        if (inst.getSnapshot !== getSnapshot || snapshotChanged || // Check if the susbcribe function changed. We can save some memory by
+        // checking whether we scheduled a subscription effect above.
         workInProgressHook !== null && workInProgressHook.memoizedState.tag & HasEffect) {
             fiber.flags |= Passive;
             pushEffect(HasEffect | Passive$1, updateStoreInstance.bind(null, fiber, inst, nextSnapshot, getSnapshot), undefined, null); // Unless we're rendering a blocking lane, schedule a consistency check.
@@ -16352,7 +18243,7 @@ module.exports = require("./cjs/react-dom.development.js");
                             enqueueConcurrentHookUpdateAndEagerlyBailout(fiber, queue, update, lane);
                             return;
                         }
-                    } catch (error1) {} finally{
+                    } catch (error) {} finally{
                         ReactCurrentDispatcher$1.current = prevDispatcher;
                     }
                 }
@@ -17816,7 +19707,8 @@ module.exports = require("./cjs/react-dom.development.js");
     function updateMemoComponent(current, workInProgress, Component, nextProps, renderLanes) {
         if (current === null) {
             var type = Component.type;
-            if (isSimpleFunctionComponent(type) && Component.compare === null && Component.defaultProps === undefined) {
+            if (isSimpleFunctionComponent(type) && Component.compare === null && // SimpleMemoComponent codepath doesn't resolve outer props either.
+            Component.defaultProps === undefined) {
                 var resolvedType = type;
                 resolvedType = resolveFunctionForHotReloading(type);
                 // and with only the default shallow comparison, we upgrade it
@@ -18628,7 +20520,8 @@ module.exports = require("./cjs/react-dom.development.js");
         };
         var primaryChildFragment;
         if (// completed, even though it's in an inconsistent state.
-        (mode & ConcurrentMode) === NoMode && // already cloned. In legacy mode, the only case where this isn't true is
+        (mode & ConcurrentMode) === NoMode && // Make sure we're on the second pass, i.e. the primary child fragment was
+        // already cloned. In legacy mode, the only case where this isn't true is
         // when DevTools forces us to display a fallback; we skip the first render
         // pass entirely and go straight to rendering the fallback. (In Concurrent
         // Mode, SuspenseList can also trigger this scenario, but this is a legacy-
@@ -19323,7 +21216,8 @@ module.exports = require("./cjs/react-dom.development.js");
                 // Neither props nor legacy context changes. Check if there's a pending
                 // update or context change.
                 var hasScheduledUpdateOrContext = checkScheduledUpdateOrContext(current, renderLanes);
-                if (!hasScheduledUpdateOrContext && // may not be work scheduled on `current`, so we check for this flag.
+                if (!hasScheduledUpdateOrContext && // If this is the second pass of an error or suspense boundary, there
+                // may not be work scheduled on `current`, so we check for this flag.
                 (workInProgress.flags & DidCapture) === NoFlags) {
                     // No pending updates or context. Bail out now.
                     didReceiveUpdate = false;
@@ -19715,7 +21609,8 @@ module.exports = require("./cjs/react-dom.development.js");
                     markUpdate(workInProgress);
                     else if (current !== null) {
                         var prevState = current.memoizedState;
-                        if (!prevState.isDehydrated || (workInProgress.flags & ForceClientRender) !== NoFlags) {
+                        if (!prevState.isDehydrated || // Check if we reverted to client rendering (e.g. due to an error)
+                        (workInProgress.flags & ForceClientRender) !== NoFlags) {
                             // Schedule an effect to clear this container at the start of the
                             // next commit. This handles the case of React rendering into a
                             // container with previous children. It's also safe to do for
@@ -20242,8 +22137,8 @@ module.exports = require("./cjs/react-dom.development.js");
                         recordLayoutEffectDuration(current);
                     }
                     else retVal = ref(null);
-                } catch (error1) {
-                    captureCommitPhaseError(current, nearestMountedAncestor, error1);
+                } catch (error) {
+                    captureCommitPhaseError(current, nearestMountedAncestor, error);
                 }
                 if (typeof retVal === "function") error("Unexpected return value from a callback ref in %s. A callback ref should not return a function.", getComponentNameFromFiber(current));
             } else ref.current = null;
@@ -20616,8 +22511,8 @@ module.exports = require("./cjs/react-dom.development.js");
                     var _instance3 = node.stateNode;
                     if (isHidden) hideTextInstance(_instance3);
                     else unhideTextInstance(_instance3, node.memoizedProps);
-                } catch (error1) {
-                    captureCommitPhaseError(finishedWork, finishedWork.return, error1);
+                } catch (error) {
+                    captureCommitPhaseError(finishedWork, finishedWork.return, error);
                 }
             } else if ((node.tag === OffscreenComponent || node.tag === LegacyHiddenComponent) && node.memoizedState !== null && node !== finishedWork) ;
             else if (node.child !== null) {
@@ -21089,14 +22984,14 @@ module.exports = require("./cjs/react-dom.development.js");
                         try {
                             startLayoutEffectTimer();
                             commitHookEffectListUnmount(Layout | HasEffect, finishedWork, finishedWork.return);
-                        } catch (error1) {
-                            captureCommitPhaseError(finishedWork, finishedWork.return, error1);
+                        } catch (error) {
+                            captureCommitPhaseError(finishedWork, finishedWork.return, error);
                         }
                         recordLayoutEffectDuration(finishedWork);
                     } else try {
                         commitHookEffectListUnmount(Layout | HasEffect, finishedWork, finishedWork.return);
-                    } catch (error2) {
-                        captureCommitPhaseError(finishedWork, finishedWork.return, error2);
+                    } catch (error) {
+                        captureCommitPhaseError(finishedWork, finishedWork.return, error);
                     }
                 }
                 return;
@@ -21123,8 +23018,8 @@ module.exports = require("./cjs/react-dom.development.js");
                     var instance = finishedWork.stateNode;
                     try {
                         resetTextContent(instance);
-                    } catch (error3) {
-                        captureCommitPhaseError(finishedWork, finishedWork.return, error3);
+                    } catch (error) {
+                        captureCommitPhaseError(finishedWork, finishedWork.return, error);
                     }
                 }
                 if (flags & Update) {
@@ -21140,8 +23035,8 @@ module.exports = require("./cjs/react-dom.development.js");
                         finishedWork.updateQueue = null;
                         if (updatePayload !== null) try {
                             commitUpdate(_instance4, updatePayload, type, oldProps, newProps, finishedWork);
-                        } catch (error4) {
-                            captureCommitPhaseError(finishedWork, finishedWork.return, error4);
+                        } catch (error) {
+                            captureCommitPhaseError(finishedWork, finishedWork.return, error);
                         }
                     }
                 }
@@ -21158,8 +23053,8 @@ module.exports = require("./cjs/react-dom.development.js");
                     var oldText = current !== null ? current.memoizedProps : newText;
                     try {
                         commitTextUpdate(textInstance, oldText, newText);
-                    } catch (error5) {
-                        captureCommitPhaseError(finishedWork, finishedWork.return, error5);
+                    } catch (error) {
+                        captureCommitPhaseError(finishedWork, finishedWork.return, error);
                     }
                 }
                 return;
@@ -21171,8 +23066,8 @@ module.exports = require("./cjs/react-dom.development.js");
                         var prevRootState = current.memoizedState;
                         if (prevRootState.isDehydrated) try {
                             commitHydratedContainer(root.containerInfo);
-                        } catch (error6) {
-                            captureCommitPhaseError(finishedWork, finishedWork.return, error6);
+                        } catch (error) {
+                            captureCommitPhaseError(finishedWork, finishedWork.return, error);
                         }
                     }
                 }
@@ -21200,8 +23095,8 @@ module.exports = require("./cjs/react-dom.development.js");
                 if (flags & Update) {
                     try {
                         commitSuspenseCallback(finishedWork);
-                    } catch (error7) {
-                        captureCommitPhaseError(finishedWork, finishedWork.return, error7);
+                    } catch (error) {
+                        captureCommitPhaseError(finishedWork, finishedWork.return, error);
                     }
                     attachSuspenseRetryListeners(finishedWork);
                 }
@@ -21659,8 +23554,8 @@ module.exports = require("./cjs/react-dom.development.js");
                 var instance = fiber.stateNode;
                 try {
                     instance.componentDidMount();
-                } catch (error1) {
-                    captureCommitPhaseError(fiber, fiber.return, error1);
+                } catch (error) {
+                    captureCommitPhaseError(fiber, fiber.return, error);
                 }
                 break;
         }
@@ -21921,7 +23816,8 @@ module.exports = require("./cjs/react-dom.development.js");
                 markRootSuspended$1(root, workInProgressRootRenderLanes);
             }
             ensureRootIsScheduled(root, eventTime);
-            if (lane === SyncLane && executionContext === NoContext && (fiber.mode & ConcurrentMode) === NoMode && !ReactCurrentActQueue$1.isBatchingLegacy) {
+            if (lane === SyncLane && executionContext === NoContext && (fiber.mode & ConcurrentMode) === NoMode && // Treat `act` as if it's inside `batchedUpdates`, even in legacy mode.
+            !ReactCurrentActQueue$1.isBatchingLegacy) {
                 // Flush the synchronous work now, unless we're already working or inside
                 // a batch. This is intentionally inside scheduleUpdateOnFiber instead of
                 // scheduleCallbackForFiber to preserve the ability to schedule a callback
@@ -21971,7 +23867,8 @@ module.exports = require("./cjs/react-dom.development.js");
         } // We use the highest priority lane to represent the priority of the callback.
         var newCallbackPriority = getHighestPriorityLane(nextLanes); // Check if there's an existing task. We may be able to reuse it.
         var existingCallbackPriority = root.callbackPriority;
-        if (existingCallbackPriority === newCallbackPriority && // Scheduler task, rather than an `act` task, cancel it and re-scheduled
+        if (existingCallbackPriority === newCallbackPriority && // Special case related to `act`. If the currently scheduled task is a
+        // Scheduler task, rather than an `act` task, cancel it and re-scheduled
         // on the `act` queue.
         !(ReactCurrentActQueue$1.current !== null && existingCallbackNode !== fakeActCallbackNode)) {
             // If we're going to re-use an existing task, it needs to exist.
@@ -22183,7 +24080,8 @@ module.exports = require("./cjs/react-dom.development.js");
             case RootSuspended:
                 markRootSuspended$1(root, lanes); // We have an acceptable loading state. We need to figure out if we
                 // should immediately commit it or wait a bit.
-                if (includesOnlyRetries(lanes) && !shouldForceFlushFallbacksInDEV()) {
+                if (includesOnlyRetries(lanes) && // do not delay if we're inside an act() scope
+                !shouldForceFlushFallbacksInDEV()) {
                     // This render only included retries, no updates. Throttle committing
                     // retries so that we don't show too many loading states too quickly.
                     var msUntilTimeout = globalMostRecentFallbackTime + FALLBACK_THROTTLE_MS - now(); // Don't bother with a very short suspense time.
@@ -22349,7 +24247,8 @@ module.exports = require("./cjs/react-dom.development.js");
         } finally{
             executionContext = prevExecutionContext; // If there were legacy sync updates, flush them at the end of the outer
             // most batchedUpdates-like method.
-            if (executionContext === NoContext && !ReactCurrentActQueue$1.isBatchingLegacy) {
+            if (executionContext === NoContext && // Treat `act` as if it's inside `batchedUpdates`, even in legacy mode.
+            !ReactCurrentActQueue$1.isBatchingLegacy) {
                 resetRenderTimer();
                 flushSyncCallbacksOnlyInLegacyMode();
             }
@@ -23550,7 +25449,7 @@ module.exports = require("./cjs/react-dom.development.js");
         new Set([
             nonExtensibleObject
         ]);
-    /* eslint-enable no-new */ } catch (e1) {
+    /* eslint-enable no-new */ } catch (e) {
         // TODO: Consider warning about bad polyfills
         hasBadMapPolyfill = true;
     }
@@ -24648,7 +26547,9 @@ module.exports = require("./cjs/react-dom.development.js");
     setAttemptHydrationAtCurrentPriority(attemptHydrationAtCurrentPriority$1);
     setGetCurrentUpdatePriority(getCurrentUpdatePriority);
     setAttemptHydrationAtPriority(runWithPriority);
-    if (typeof Map !== "function" || Map.prototype == null || typeof Map.prototype.forEach !== "function" || typeof Set !== "function" || Set.prototype == null || typeof Set.prototype.clear !== "function" || typeof Set.prototype.forEach !== "function") error("React depends on Map and Set built-in types. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills");
+    if (typeof Map !== "function" || // $FlowIssue Flow incorrectly thinks Map has no prototype
+    Map.prototype == null || typeof Map.prototype.forEach !== "function" || typeof Set !== "function" || // $FlowIssue Flow incorrectly thinks Set has no prototype
+    Set.prototype == null || typeof Set.prototype.clear !== "function" || typeof Set.prototype.forEach !== "function") error("React depends on Map and Set built-in types. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills");
     setRestoreImplementation(restoreControlledState$3);
     setBatchingImplementation(batchedUpdates$1, discreteUpdates, flushSync);
     function createPortal$1(children, container) {
@@ -24717,11 +26618,11 @@ module.exports = require("./cjs/react-dom.development.js");
     /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */ if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
 })();
 
-},{"react":"21dqq","scheduler":"juvHo"}],"juvHo":[function(require,module,exports) {
+},{"6f0162e9ab224cd4":"21dqq","8ad4ca65319d28a7":"juvHo"}],"juvHo":[function(require,module,exports) {
 "use strict";
-module.exports = require("./cjs/scheduler.development.js");
+module.exports = require("ef03b89c8fe2794e");
 
-},{"./cjs/scheduler.development.js":"RqdIf"}],"RqdIf":[function(require,module,exports) {
+},{"ef03b89c8fe2794e":"RqdIf"}],"RqdIf":[function(require,module,exports) {
 /**
  * @license React
  * scheduler.development.js
@@ -25175,1856 +27076,6 @@ module.exports = require("./cjs/scheduler.development.js");
     /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */ if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
 })();
 
-},{}],"e9Zfo":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$2430 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$2430.prelude(module);
-
-try {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _jsxDevRuntime = require("react/jsx-dev-runtime");
-/**
- * Application component
- *
- * To contain application wide settings, routes, state, etc.
- */ var _react = require("react");
-var _reactDefault = parcelHelpers.interopDefault(_react);
-var _about = require("./Components/About");
-var _aboutDefault = parcelHelpers.interopDefault(_about);
-var _footer = require("./Components/Footer");
-var _footerDefault = parcelHelpers.interopDefault(_footer);
-var _header = require("./Components/Header");
-var _headerDefault = parcelHelpers.interopDefault(_header);
-var _home = require("./Components/Home");
-var _homeDefault = parcelHelpers.interopDefault(_home);
-var _portfolio = require("./Components/Portfolio");
-var _portfolioDefault = parcelHelpers.interopDefault(_portfolio);
-// import "./styles.css";
-// import "../style.css";
-/**
- * This object represents your information. The project is set so that you
- * only need to update these here, and values are passed a properties to the
- * components that need that information.
- *
- * Update the values below with your information.
- *
- * If you don't have one of the social sites listed, leave it as an empty string.
- */ const siteProps = {
-    name: "Aagam Golechha",
-    title: "Software Engineer and Web Designer",
-    email: "aagamaj1212@gmail.com",
-    gitHub: "AagamAJ",
-    instagram: "aagam__aj",
-    linkedIn: "aagamgolechha",
-    medium: "",
-    twitter: "aagam_aj",
-    youTube: ""
-};
-const primaryColor = "#4E567E";
-const secondaryColor = "#D2F1E4";
-const App = ()=>{
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        id: "main",
-        children: [
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _headerDefault.default), {}, void 0, false, {
-                fileName: "src/App.jsx",
-                lineNumber: 45,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _homeDefault.default), {
-                name: siteProps.name,
-                title: siteProps.title
-            }, void 0, false, {
-                fileName: "src/App.jsx",
-                lineNumber: 46,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _aboutDefault.default), {}, void 0, false, {
-                fileName: "src/App.jsx",
-                lineNumber: 47,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _portfolioDefault.default), {}, void 0, false, {
-                fileName: "src/App.jsx",
-                lineNumber: 48,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _footerDefault.default), {
-                ...siteProps,
-                primaryColor: primaryColor,
-                secondaryColor: secondaryColor
-            }, void 0, false, {
-                fileName: "src/App.jsx",
-                lineNumber: 49,
-                columnNumber: 7
-            }, undefined)
-        ]
-    }, void 0, true, {
-        fileName: "src/App.jsx",
-        lineNumber: 44,
-        columnNumber: 5
-    }, undefined);
-};
-_c = App;
-exports.default = App;
-var _c;
-$RefreshReg$(_c, "App");
-
-  $parcel$ReactRefreshHelpers$2430.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","./Components/About":"kouZu","./Components/Footer":"7GWgX","./Components/Header":"9Dt2F","./Components/Home":"jIEVO","./Components/Portfolio":"lCaEt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"kouZu":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$17a8 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$17a8.prelude(module);
-
-try {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _jsxDevRuntime = require("react/jsx-dev-runtime");
-/**
- * About component
- *
- * Space for you to describe more about yourself.
- */ var _react = require("react");
-var _reactDefault = parcelHelpers.interopDefault(_react);
-/**
- * About background image
- *
- * Below is a sample image. Upload the image of your choice into the "images"
- * directory and import here for use. Then, set imageAltText to string that 
- * represents what you see in that image.
- *
- * Need an image? Check out https://unsplash.com to download a image you
- * freely use on your site.
- */ var _motionBackgroundJpg = require("../images/motion-background.jpg");
-var _motionBackgroundJpgDefault = parcelHelpers.interopDefault(_motionBackgroundJpg);
-const imageAltText = "Purple and Blue Abstract Background";
-/**
- * Sort description that expands on your title on the Home component.
- */ const description = "I'm an IT student at RGPV University, Bhopal, passionate about intuitive UI design. With expertise in ReactJS, JavaScript, and MongoDB, I aim to create innovative solutions blending creativity and simplicity for optimal user experiences.";
-/**
- * List of some of skills or technologies you work on, are learning,
- * passionate about, or enjoy,
- */ const skillsList = [
-    "Full-Stack Development",
-    "Front-End Developmemnt",
-    "Back-End Development",
-    "Object Oriented Programming [OOP]",
-    "Software Development Life Cycle [SDLC]",
-    "Responsive Web Design",
-    "Problem Solving",
-    "Version Control (Git/GitHub)", 
-];
-/**
- * Use this to give more information about what you are passionate about,
- * how you best work, or even a quote. This will help someone learn more
- * about you on a professional level.
- */ const detailOrQuote = "I am passionate about solving problems in new, creative ways to drive innovation. With a keen eye for detail and a dedication to user-centric design, I continually seek to make technology more accessible and intuitive for all.";
-const About = ()=>{
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("section", {
-        className: "padding",
-        children: [
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                className: "background",
-                src: (0, _motionBackgroundJpgDefault.default),
-                alt: imageAltText
-            }, void 0, false, {
-                fileName: "src/Components/About.jsx",
-                lineNumber: 55,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                id: "about",
-                style: {
-                    backgroundColor: "white",
-                    width: "50%",
-                    padding: "4rem",
-                    margin: "3rem auto",
-                    textAlign: "center"
-                },
-                children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                        children: "About Myself"
-                    }, void 0, false, {
-                        fileName: "src/Components/About.jsx",
-                        lineNumber: 65,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                        className: "large",
-                        children: description
-                    }, void 0, false, {
-                        fileName: "src/Components/About.jsx",
-                        lineNumber: 66,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("hr", {}, void 0, false, {
-                        fileName: "src/Components/About.jsx",
-                        lineNumber: 67,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("ul", {
-                        style: {
-                            textAlign: "left",
-                            columns: 2,
-                            fontSize: "1.25rem",
-                            margin: "2rem 3rem",
-                            gap: "3rem"
-                        },
-                        children: skillsList.map((skill)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
-                                children: skill
-                            }, skill, false, {
-                                fileName: "src/Components/About.jsx",
-                                lineNumber: 78,
-                                columnNumber: 13
-                            }, undefined))
-                    }, void 0, false, {
-                        fileName: "src/Components/About.jsx",
-                        lineNumber: 68,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("hr", {}, void 0, false, {
-                        fileName: "src/Components/About.jsx",
-                        lineNumber: 81,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                        style: {
-                            padding: "1rem 3rem 0"
-                        },
-                        children: detailOrQuote
-                    }, void 0, false, {
-                        fileName: "src/Components/About.jsx",
-                        lineNumber: 82,
-                        columnNumber: 9
-                    }, undefined)
-                ]
-            }, void 0, true, {
-                fileName: "src/Components/About.jsx",
-                lineNumber: 56,
-                columnNumber: 7
-            }, undefined)
-        ]
-    }, void 0, true, {
-        fileName: "src/Components/About.jsx",
-        lineNumber: 54,
-        columnNumber: 5
-    }, undefined);
-};
-_c = About;
-exports.default = About;
-var _c;
-$RefreshReg$(_c, "About");
-
-  $parcel$ReactRefreshHelpers$17a8.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","../images/motion-background.jpg":"bheKC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"bheKC":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "motion-background.0a6a8db0.jpg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
-"use strict";
-var bundleURL = {};
-function getBundleURLCached(id) {
-    var value = bundleURL[id];
-    if (!value) {
-        value = getBundleURL();
-        bundleURL[id] = value;
-    }
-    return value;
-}
-function getBundleURL() {
-    try {
-        throw new Error();
-    } catch (err) {
-        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
-        if (matches) // The first two stack frames will be this function and getBundleURLCached.
-        // Use the 3rd one, which will be a runtime in the original bundle.
-        return getBaseURL(matches[2]);
-    }
-    return "/";
-}
-function getBaseURL(url) {
-    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
-} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
-function getOrigin(url) {
-    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
-    if (!matches) throw new Error("Origin not found");
-    return matches[0];
-}
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-exports.getOrigin = getOrigin;
-
-},{}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"km3Ru":[function(require,module,exports) {
-"use strict";
-var Refresh = require("react-refresh/runtime");
-function debounce(func, delay) {
-    var args;
-    var timeout = undefined;
-    return function(args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(function() {
-            timeout = undefined;
-            func.call(null, args);
-        }, delay);
-    };
-}
-var enqueueUpdate = debounce(function() {
-    Refresh.performReactRefresh();
-}, 30); // Everthing below is either adapted or copied from
-// https://github.com/facebook/metro/blob/61de16bd1edd7e738dd0311c89555a644023ab2d/packages/metro/src/lib/polyfills/require.js
-// MIT License - Copyright (c) Facebook, Inc. and its affiliates.
-module.exports.prelude = function(module1) {
-    window.$RefreshReg$ = function(type, id) {
-        Refresh.register(type, module1.id + " " + id);
-    };
-    window.$RefreshSig$ = Refresh.createSignatureFunctionForTransform;
-};
-module.exports.postlude = function(module1) {
-    if (isReactRefreshBoundary(module1.exports)) {
-        registerExportsForReactRefresh(module1);
-        if (module1.hot) {
-            module1.hot.dispose(function(data) {
-                if (Refresh.hasUnrecoverableErrors()) window.location.reload();
-                data.prevExports = module1.exports;
-            });
-            module1.hot.accept(function(getParents) {
-                var prevExports = module1.hot.data.prevExports;
-                var nextExports = module1.exports; // Since we just executed the code for it, it's possible
-                // that the new exports make it ineligible for being a boundary.
-                var isNoLongerABoundary = !isReactRefreshBoundary(nextExports); // It can also become ineligible if its exports are incompatible
-                // with the previous exports.
-                // For example, if you add/remove/change exports, we'll want
-                // to re-execute the importing modules, and force those components
-                // to re-render. Similarly, if you convert a class component
-                // to a function, we want to invalidate the boundary.
-                var didInvalidate = shouldInvalidateReactRefreshBoundary(prevExports, nextExports);
-                if (isNoLongerABoundary || didInvalidate) {
-                    // We'll be conservative. The only case in which we won't do a full
-                    // reload is if all parent modules are also refresh boundaries.
-                    // In that case we'll add them to the current queue.
-                    var parents = getParents();
-                    if (parents.length === 0) {
-                        // Looks like we bubbled to the root. Can't recover from that.
-                        window.location.reload();
-                        return;
-                    }
-                    return parents;
-                }
-                enqueueUpdate();
-            });
-        }
-    }
-};
-function isReactRefreshBoundary(exports) {
-    if (Refresh.isLikelyComponentType(exports)) return true;
-    if (exports == null || typeof exports !== "object") // Exit if we can't iterate over exports.
-    return false;
-    var hasExports = false;
-    var areAllExportsComponents = true;
-    let isESM = "__esModule" in exports;
-    for(var key in exports){
-        hasExports = true;
-        if (key === "__esModule") continue;
-        var desc = Object.getOwnPropertyDescriptor(exports, key);
-        if (desc && desc.get && !isESM) // Don't invoke getters for CJS as they may have side effects.
-        return false;
-        var exportValue = exports[key];
-        if (!Refresh.isLikelyComponentType(exportValue)) areAllExportsComponents = false;
-    }
-    return hasExports && areAllExportsComponents;
-}
-function shouldInvalidateReactRefreshBoundary(prevExports, nextExports) {
-    var prevSignature = getRefreshBoundarySignature(prevExports);
-    var nextSignature = getRefreshBoundarySignature(nextExports);
-    if (prevSignature.length !== nextSignature.length) return true;
-    for(var i = 0; i < nextSignature.length; i++){
-        if (prevSignature[i] !== nextSignature[i]) return true;
-    }
-    return false;
-} // When this signature changes, it's unsafe to stop at this refresh boundary.
-function getRefreshBoundarySignature(exports) {
-    var signature = [];
-    signature.push(Refresh.getFamilyByType(exports));
-    if (exports == null || typeof exports !== "object") // Exit if we can't iterate over exports.
-    // (This is important for legacy environments.)
-    return signature;
-    let isESM = "__esModule" in exports;
-    for(var key in exports){
-        if (key === "__esModule") continue;
-        var desc = Object.getOwnPropertyDescriptor(exports, key);
-        if (desc && desc.get && !isESM) continue;
-        var exportValue = exports[key];
-        signature.push(key);
-        signature.push(Refresh.getFamilyByType(exportValue));
-    }
-    return signature;
-}
-function registerExportsForReactRefresh(module1) {
-    var exports = module1.exports, id = module1.id;
-    Refresh.register(exports, id + " %exports%");
-    if (exports == null || typeof exports !== "object") // Exit if we can't iterate over exports.
-    // (This is important for legacy environments.)
-    return;
-    let isESM = "__esModule" in exports;
-    for(var key in exports){
-        var desc = Object.getOwnPropertyDescriptor(exports, key);
-        if (desc && desc.get && !isESM) continue;
-        var exportValue = exports[key];
-        Refresh.register(exportValue, id + " %exports% " + key);
-    }
-}
-
-},{"react-refresh/runtime":"786KC"}],"7GWgX":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$8b43 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$8b43.prelude(module);
-
-try {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _jsxDevRuntime = require("react/jsx-dev-runtime");
-/**
- * Footer component
- *
- * Displays avenues to contact you.
- * Contact information is passed in from the App component that
- * renders the Footer.
- *
- * If a social value has an empty string it will not be displayed.
- */ var _react = require("react");
-var _reactDefault = parcelHelpers.interopDefault(_react);
-var _propTypes = require("prop-types");
-var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
-var _devdottoSvg = require("../images/socials/devdotto.svg");
-var _devdottoSvgDefault = parcelHelpers.interopDefault(_devdottoSvg);
-var _envelopeSvg = require("../images/socials/envelope.svg");
-var _envelopeSvgDefault = parcelHelpers.interopDefault(_envelopeSvg);
-var _githubSvg = require("../images/socials/github.svg");
-var _githubSvgDefault = parcelHelpers.interopDefault(_githubSvg);
-var _instagramSvg = require("../images/socials/instagram.svg");
-var _instagramSvgDefault = parcelHelpers.interopDefault(_instagramSvg);
-var _linkedinSvg = require("../images/socials/linkedin.svg");
-var _linkedinSvgDefault = parcelHelpers.interopDefault(_linkedinSvg);
-var _mediumSvg = require("../images/socials/medium.svg");
-var _mediumSvgDefault = parcelHelpers.interopDefault(_mediumSvg);
-var _twitterSvg = require("../images/socials/twitter.svg");
-var _twitterSvgDefault = parcelHelpers.interopDefault(_twitterSvg);
-var _youtubeSvg = require("../images/socials/youtube.svg");
-var _youtubeSvgDefault = parcelHelpers.interopDefault(_youtubeSvg);
-/**
- * 💡 Learning resources
- *
- *  HTML hyperlinks: https://www.w3schools.com/html/html_links.asp
- *  Opening links in new tabs: https://www.freecodecamp.org/news/how-to-use-html-to-open-link-in-new-tab/
- */ const Footer = (props)=>{
-    const { devDotTo , email , gitHub , instagram , linkedIn , medium , name , primaryColor , twitter , youTube ,  } = props;
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        id: "footer",
-        style: {
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "2.5rem",
-            padding: "5rem 0 3rem",
-            backgroundColor: primaryColor,
-            width: "100vw"
-        },
-        children: [
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                style: {
-                    display: "flex",
-                    justifyContent: "center",
-                    gap: "2.5rem"
-                },
-                children: [
-                    email && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
-                        href: `mailto:${email}`,
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                            src: (0, _envelopeSvgDefault.default),
-                            alt: "email",
-                            className: "socialIcon"
-                        }, void 0, false, {
-                            fileName: "src/Components/Footer.jsx",
-                            lineNumber: 65,
-                            columnNumber: 13
-                        }, undefined)
-                    }, void 0, false, {
-                        fileName: "src/Components/Footer.jsx",
-                        lineNumber: 64,
-                        columnNumber: 11
-                    }, undefined),
-                    devDotTo && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
-                        href: `https://dev.to/${devDotTo}`,
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                            src: (0, _devdottoSvgDefault.default),
-                            alt: "Dev.to",
-                            className: "socialIcon"
-                        }, void 0, false, {
-                            fileName: "src/Components/Footer.jsx",
-                            lineNumber: 70,
-                            columnNumber: 13
-                        }, undefined)
-                    }, void 0, false, {
-                        fileName: "src/Components/Footer.jsx",
-                        lineNumber: 69,
-                        columnNumber: 11
-                    }, undefined),
-                    gitHub && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
-                        href: `https://github.com/${gitHub}`,
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                            src: (0, _githubSvgDefault.default),
-                            alt: "GitHub",
-                            className: "socialIcon"
-                        }, void 0, false, {
-                            fileName: "src/Components/Footer.jsx",
-                            lineNumber: 75,
-                            columnNumber: 13
-                        }, undefined)
-                    }, void 0, false, {
-                        fileName: "src/Components/Footer.jsx",
-                        lineNumber: 74,
-                        columnNumber: 11
-                    }, undefined),
-                    instagram && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
-                        href: `https://www.instagram.com/${instagram}`,
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                            src: (0, _instagramSvgDefault.default),
-                            alt: "Instagram",
-                            className: "socialIcon"
-                        }, void 0, false, {
-                            fileName: "src/Components/Footer.jsx",
-                            lineNumber: 84,
-                            columnNumber: 13
-                        }, undefined)
-                    }, void 0, false, {
-                        fileName: "src/Components/Footer.jsx",
-                        lineNumber: 79,
-                        columnNumber: 11
-                    }, undefined),
-                    linkedIn && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
-                        href: `https://www.linkedin.com/in/${linkedIn}`,
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                            src: (0, _linkedinSvgDefault.default),
-                            alt: "LinkedIn",
-                            className: "socialIcon"
-                        }, void 0, false, {
-                            fileName: "src/Components/Footer.jsx",
-                            lineNumber: 93,
-                            columnNumber: 13
-                        }, undefined)
-                    }, void 0, false, {
-                        fileName: "src/Components/Footer.jsx",
-                        lineNumber: 88,
-                        columnNumber: 11
-                    }, undefined),
-                    medium && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
-                        href: `https://medium.com/@${medium}`,
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                            src: (0, _mediumSvgDefault.default),
-                            alt: "Medium",
-                            className: "socialIcon"
-                        }, void 0, false, {
-                            fileName: "src/Components/Footer.jsx",
-                            lineNumber: 98,
-                            columnNumber: 13
-                        }, undefined)
-                    }, void 0, false, {
-                        fileName: "src/Components/Footer.jsx",
-                        lineNumber: 97,
-                        columnNumber: 11
-                    }, undefined),
-                    twitter && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
-                        href: `https://twitter.com/${twitter}`,
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                            src: (0, _twitterSvgDefault.default),
-                            alt: "Twitter",
-                            className: "socialIcon"
-                        }, void 0, false, {
-                            fileName: "src/Components/Footer.jsx",
-                            lineNumber: 103,
-                            columnNumber: 13
-                        }, undefined)
-                    }, void 0, false, {
-                        fileName: "src/Components/Footer.jsx",
-                        lineNumber: 102,
-                        columnNumber: 11
-                    }, undefined),
-                    youTube && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
-                        href: `https://www.youtube.com/c/${youTube}`,
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                            src: (0, _youtubeSvgDefault.default),
-                            alt: "YouTube",
-                            className: "socialIcon"
-                        }, void 0, false, {
-                            fileName: "src/Components/Footer.jsx",
-                            lineNumber: 112,
-                            columnNumber: 13
-                        }, undefined)
-                    }, void 0, false, {
-                        fileName: "src/Components/Footer.jsx",
-                        lineNumber: 107,
-                        columnNumber: 11
-                    }, undefined)
-                ]
-            }, void 0, true, {
-                fileName: "src/Components/Footer.jsx",
-                lineNumber: 56,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                className: "small",
-                style: {
-                    marginTop: 0,
-                    color: "white"
-                },
-                children: [
-                    "Created by ",
-                    name
-                ]
-            }, void 0, true, {
-                fileName: "src/Components/Footer.jsx",
-                lineNumber: 116,
-                columnNumber: 7
-            }, undefined)
-        ]
-    }, void 0, true, {
-        fileName: "src/Components/Footer.jsx",
-        lineNumber: 44,
-        columnNumber: 5
-    }, undefined);
-};
-_c = Footer;
-Footer.defaultProps = {
-    name: ""
-};
-Footer.propTypes = {
-    devDotTo: (0, _propTypesDefault.default).string,
-    email: (0, _propTypesDefault.default).string,
-    gitHub: (0, _propTypesDefault.default).string,
-    instagram: (0, _propTypesDefault.default).string,
-    linkedIn: (0, _propTypesDefault.default).string,
-    medium: (0, _propTypesDefault.default).string,
-    name: (0, _propTypesDefault.default).string.isRequired,
-    primaryColor: (0, _propTypesDefault.default).string,
-    twitter: (0, _propTypesDefault.default).string,
-    youTube: (0, _propTypesDefault.default).string
-};
-exports.default = Footer;
-var _c;
-$RefreshReg$(_c, "Footer");
-
-  $parcel$ReactRefreshHelpers$8b43.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","prop-types":"7wKI2","../images/socials/devdotto.svg":"3e7RK","../images/socials/envelope.svg":"26uWO","../images/socials/github.svg":"k7Qiw","../images/socials/instagram.svg":"38Ug0","../images/socials/linkedin.svg":"gDewj","../images/socials/medium.svg":"4UTZr","../images/socials/twitter.svg":"irVHW","../images/socials/youtube.svg":"aALAo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"7wKI2":[function(require,module,exports) {
-var ReactIs = require("react-is");
-// By explicitly using `prop-types` you are opting into new development behavior.
-// http://fb.me/prop-types-in-prod
-var throwOnDirectAccess = true;
-module.exports = require("./factoryWithTypeCheckers")(ReactIs.isElement, throwOnDirectAccess);
-
-},{"react-is":"7EuwB","./factoryWithTypeCheckers":"bBUgD"}],"7EuwB":[function(require,module,exports) {
-"use strict";
-module.exports = require("./cjs/react-is.development.js");
-
-},{"./cjs/react-is.development.js":"5DsXl"}],"5DsXl":[function(require,module,exports) {
-/** @license React v16.13.1
- * react-is.development.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */ "use strict";
-(function() {
-    "use strict";
-    // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
-    // nor polyfill, then a plain number is used for performance.
-    var hasSymbol = typeof Symbol === "function" && Symbol.for;
-    var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for("react.element") : 0xeac7;
-    var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for("react.portal") : 0xeaca;
-    var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for("react.fragment") : 0xeacb;
-    var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for("react.strict_mode") : 0xeacc;
-    var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for("react.profiler") : 0xead2;
-    var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for("react.provider") : 0xeacd;
-    var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for("react.context") : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
-    // (unstable) APIs that have been removed. Can we remove the symbols?
-    var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for("react.async_mode") : 0xeacf;
-    var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for("react.concurrent_mode") : 0xeacf;
-    var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for("react.forward_ref") : 0xead0;
-    var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for("react.suspense") : 0xead1;
-    var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for("react.suspense_list") : 0xead8;
-    var REACT_MEMO_TYPE = hasSymbol ? Symbol.for("react.memo") : 0xead3;
-    var REACT_LAZY_TYPE = hasSymbol ? Symbol.for("react.lazy") : 0xead4;
-    var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for("react.block") : 0xead9;
-    var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for("react.fundamental") : 0xead5;
-    var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for("react.responder") : 0xead6;
-    var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for("react.scope") : 0xead7;
-    function isValidElementType(type) {
-        return typeof type === "string" || typeof type === "function" || type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === "object" && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
-    }
-    function typeOf(object) {
-        if (typeof object === "object" && object !== null) {
-            var $$typeof = object.$$typeof;
-            switch($$typeof){
-                case REACT_ELEMENT_TYPE:
-                    var type = object.type;
-                    switch(type){
-                        case REACT_ASYNC_MODE_TYPE:
-                        case REACT_CONCURRENT_MODE_TYPE:
-                        case REACT_FRAGMENT_TYPE:
-                        case REACT_PROFILER_TYPE:
-                        case REACT_STRICT_MODE_TYPE:
-                        case REACT_SUSPENSE_TYPE:
-                            return type;
-                        default:
-                            var $$typeofType = type && type.$$typeof;
-                            switch($$typeofType){
-                                case REACT_CONTEXT_TYPE:
-                                case REACT_FORWARD_REF_TYPE:
-                                case REACT_LAZY_TYPE:
-                                case REACT_MEMO_TYPE:
-                                case REACT_PROVIDER_TYPE:
-                                    return $$typeofType;
-                                default:
-                                    return $$typeof;
-                            }
-                    }
-                case REACT_PORTAL_TYPE:
-                    return $$typeof;
-            }
-        }
-        return undefined;
-    } // AsyncMode is deprecated along with isAsyncMode
-    var AsyncMode = REACT_ASYNC_MODE_TYPE;
-    var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
-    var ContextConsumer = REACT_CONTEXT_TYPE;
-    var ContextProvider = REACT_PROVIDER_TYPE;
-    var Element = REACT_ELEMENT_TYPE;
-    var ForwardRef = REACT_FORWARD_REF_TYPE;
-    var Fragment = REACT_FRAGMENT_TYPE;
-    var Lazy = REACT_LAZY_TYPE;
-    var Memo = REACT_MEMO_TYPE;
-    var Portal = REACT_PORTAL_TYPE;
-    var Profiler = REACT_PROFILER_TYPE;
-    var StrictMode = REACT_STRICT_MODE_TYPE;
-    var Suspense = REACT_SUSPENSE_TYPE;
-    var hasWarnedAboutDeprecatedIsAsyncMode = false; // AsyncMode should be deprecated
-    function isAsyncMode(object) {
-        if (!hasWarnedAboutDeprecatedIsAsyncMode) {
-            hasWarnedAboutDeprecatedIsAsyncMode = true; // Using console['warn'] to evade Babel and ESLint
-            console["warn"]("The ReactIs.isAsyncMode() alias has been deprecated, and will be removed in React 17+. Update your code to use ReactIs.isConcurrentMode() instead. It has the exact same API.");
-        }
-        return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
-    }
-    function isConcurrentMode(object) {
-        return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
-    }
-    function isContextConsumer(object) {
-        return typeOf(object) === REACT_CONTEXT_TYPE;
-    }
-    function isContextProvider(object) {
-        return typeOf(object) === REACT_PROVIDER_TYPE;
-    }
-    function isElement(object) {
-        return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
-    }
-    function isForwardRef(object) {
-        return typeOf(object) === REACT_FORWARD_REF_TYPE;
-    }
-    function isFragment(object) {
-        return typeOf(object) === REACT_FRAGMENT_TYPE;
-    }
-    function isLazy(object) {
-        return typeOf(object) === REACT_LAZY_TYPE;
-    }
-    function isMemo(object) {
-        return typeOf(object) === REACT_MEMO_TYPE;
-    }
-    function isPortal(object) {
-        return typeOf(object) === REACT_PORTAL_TYPE;
-    }
-    function isProfiler(object) {
-        return typeOf(object) === REACT_PROFILER_TYPE;
-    }
-    function isStrictMode(object) {
-        return typeOf(object) === REACT_STRICT_MODE_TYPE;
-    }
-    function isSuspense(object) {
-        return typeOf(object) === REACT_SUSPENSE_TYPE;
-    }
-    exports.AsyncMode = AsyncMode;
-    exports.ConcurrentMode = ConcurrentMode;
-    exports.ContextConsumer = ContextConsumer;
-    exports.ContextProvider = ContextProvider;
-    exports.Element = Element;
-    exports.ForwardRef = ForwardRef;
-    exports.Fragment = Fragment;
-    exports.Lazy = Lazy;
-    exports.Memo = Memo;
-    exports.Portal = Portal;
-    exports.Profiler = Profiler;
-    exports.StrictMode = StrictMode;
-    exports.Suspense = Suspense;
-    exports.isAsyncMode = isAsyncMode;
-    exports.isConcurrentMode = isConcurrentMode;
-    exports.isContextConsumer = isContextConsumer;
-    exports.isContextProvider = isContextProvider;
-    exports.isElement = isElement;
-    exports.isForwardRef = isForwardRef;
-    exports.isFragment = isFragment;
-    exports.isLazy = isLazy;
-    exports.isMemo = isMemo;
-    exports.isPortal = isPortal;
-    exports.isProfiler = isProfiler;
-    exports.isStrictMode = isStrictMode;
-    exports.isSuspense = isSuspense;
-    exports.isValidElementType = isValidElementType;
-    exports.typeOf = typeOf;
-})();
-
-},{}],"bBUgD":[function(require,module,exports) {
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */ "use strict";
-var ReactIs = require("react-is");
-var assign = require("object-assign");
-var ReactPropTypesSecret = require("./lib/ReactPropTypesSecret");
-var has = require("./lib/has");
-var checkPropTypes = require("./checkPropTypes");
-var printWarning = function() {};
-printWarning = function(text) {
-    var message = "Warning: " + text;
-    if (typeof console !== "undefined") console.error(message);
-    try {
-        // --- Welcome to debugging React ---
-        // This error was thrown as a convenience so that you can use this stack
-        // to find the callsite that caused this warning to fire.
-        throw new Error(message);
-    } catch (x) {}
-};
-function emptyFunctionThatReturnsNull() {
-    return null;
-}
-module.exports = function(isValidElement, throwOnDirectAccess) {
-    /* global Symbol */ var ITERATOR_SYMBOL = typeof Symbol === "function" && Symbol.iterator;
-    var FAUX_ITERATOR_SYMBOL = "@@iterator"; // Before Symbol spec.
-    /**
-   * Returns the iterator method function contained on the iterable object.
-   *
-   * Be sure to invoke the function with the iterable as context:
-   *
-   *     var iteratorFn = getIteratorFn(myIterable);
-   *     if (iteratorFn) {
-   *       var iterator = iteratorFn.call(myIterable);
-   *       ...
-   *     }
-   *
-   * @param {?object} maybeIterable
-   * @return {?function}
-   */ function getIteratorFn(maybeIterable) {
-        var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
-        if (typeof iteratorFn === "function") return iteratorFn;
-    }
-    /**
-   * Collection of methods that allow declaration and validation of props that are
-   * supplied to React components. Example usage:
-   *
-   *   var Props = require('ReactPropTypes');
-   *   var MyArticle = React.createClass({
-   *     propTypes: {
-   *       // An optional string prop named "description".
-   *       description: Props.string,
-   *
-   *       // A required enum prop named "category".
-   *       category: Props.oneOf(['News','Photos']).isRequired,
-   *
-   *       // A prop named "dialog" that requires an instance of Dialog.
-   *       dialog: Props.instanceOf(Dialog).isRequired
-   *     },
-   *     render: function() { ... }
-   *   });
-   *
-   * A more formal specification of how these methods are used:
-   *
-   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
-   *   decl := ReactPropTypes.{type}(.isRequired)?
-   *
-   * Each and every declaration produces a function with the same signature. This
-   * allows the creation of custom validation functions. For example:
-   *
-   *  var MyLink = React.createClass({
-   *    propTypes: {
-   *      // An optional string or URI prop named "href".
-   *      href: function(props, propName, componentName) {
-   *        var propValue = props[propName];
-   *        if (propValue != null && typeof propValue !== 'string' &&
-   *            !(propValue instanceof URI)) {
-   *          return new Error(
-   *            'Expected a string or an URI for ' + propName + ' in ' +
-   *            componentName
-   *          );
-   *        }
-   *      }
-   *    },
-   *    render: function() {...}
-   *  });
-   *
-   * @internal
-   */ var ANONYMOUS = "<<anonymous>>";
-    // Important!
-    // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
-    var ReactPropTypes = {
-        array: createPrimitiveTypeChecker("array"),
-        bigint: createPrimitiveTypeChecker("bigint"),
-        bool: createPrimitiveTypeChecker("boolean"),
-        func: createPrimitiveTypeChecker("function"),
-        number: createPrimitiveTypeChecker("number"),
-        object: createPrimitiveTypeChecker("object"),
-        string: createPrimitiveTypeChecker("string"),
-        symbol: createPrimitiveTypeChecker("symbol"),
-        any: createAnyTypeChecker(),
-        arrayOf: createArrayOfTypeChecker,
-        element: createElementTypeChecker(),
-        elementType: createElementTypeTypeChecker(),
-        instanceOf: createInstanceTypeChecker,
-        node: createNodeChecker(),
-        objectOf: createObjectOfTypeChecker,
-        oneOf: createEnumTypeChecker,
-        oneOfType: createUnionTypeChecker,
-        shape: createShapeTypeChecker,
-        exact: createStrictShapeTypeChecker
-    };
-    /**
-   * inlined Object.is polyfill to avoid requiring consumers ship their own
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
-   */ /*eslint-disable no-self-compare*/ function is(x, y) {
-        // SameValue algorithm
-        if (x === y) // Steps 1-5, 7-10
-        // Steps 6.b-6.e: +0 != -0
-        return x !== 0 || 1 / x === 1 / y;
-        else // Step 6.a: NaN == NaN
-        return x !== x && y !== y;
-    }
-    /*eslint-enable no-self-compare*/ /**
-   * We use an Error-like object for backward compatibility as people may call
-   * PropTypes directly and inspect their output. However, we don't use real
-   * Errors anymore. We don't inspect their stack anyway, and creating them
-   * is prohibitively expensive if they are created too often, such as what
-   * happens in oneOfType() for any type before the one that matched.
-   */ function PropTypeError(message, data) {
-        this.message = message;
-        this.data = data && typeof data === "object" ? data : {};
-        this.stack = "";
-    }
-    // Make `instanceof Error` still work for returned errors.
-    PropTypeError.prototype = Error.prototype;
-    function createChainableTypeChecker(validate) {
-        var manualPropTypeCallCache = {};
-        var manualPropTypeWarningCount = 0;
-        function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
-            componentName = componentName || ANONYMOUS;
-            propFullName = propFullName || propName;
-            if (secret !== ReactPropTypesSecret) {
-                if (throwOnDirectAccess) {
-                    // New behavior only for users of `prop-types` package
-                    var err = new Error("Calling PropTypes validators directly is not supported by the `prop-types` package. Use `PropTypes.checkPropTypes()` to call them. Read more at http://fb.me/use-check-prop-types");
-                    err.name = "Invariant Violation";
-                    throw err;
-                } else if (typeof console !== "undefined") {
-                    // Old behavior for people using React.PropTypes
-                    var cacheKey = componentName + ":" + propName;
-                    if (!manualPropTypeCallCache[cacheKey] && // Avoid spamming the console because they are often not actionable except for lib authors
-                    manualPropTypeWarningCount < 3) {
-                        printWarning("You are manually calling a React.PropTypes validation function for the `" + propFullName + "` prop on `" + componentName + "`. This is deprecated " + "and will throw in the standalone `prop-types` package. " + "You may be seeing this warning due to a third-party PropTypes " + "library. See https://fb.me/react-warning-dont-call-proptypes " + "for details.");
-                        manualPropTypeCallCache[cacheKey] = true;
-                        manualPropTypeWarningCount++;
-                    }
-                }
-            }
-            if (props[propName] == null) {
-                if (isRequired) {
-                    if (props[propName] === null) return new PropTypeError("The " + location + " `" + propFullName + "` is marked as required " + ("in `" + componentName + "`, but its value is `null`."));
-                    return new PropTypeError("The " + location + " `" + propFullName + "` is marked as required in " + ("`" + componentName + "`, but its value is `undefined`."));
-                }
-                return null;
-            } else return validate(props, propName, componentName, location, propFullName);
-        }
-        var chainedCheckType = checkType.bind(null, false);
-        chainedCheckType.isRequired = checkType.bind(null, true);
-        return chainedCheckType;
-    }
-    function createPrimitiveTypeChecker(expectedType) {
-        function validate(props, propName, componentName, location, propFullName, secret) {
-            var propValue = props[propName];
-            var propType = getPropType(propValue);
-            if (propType !== expectedType) {
-                // `propValue` being instance of, say, date/regexp, pass the 'object'
-                // check, but we can offer a more precise error message here rather than
-                // 'of type `object`'.
-                var preciseType = getPreciseType(propValue);
-                return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + preciseType + "` supplied to `" + componentName + "`, expected ") + ("`" + expectedType + "`."), {
-                    expectedType: expectedType
-                });
-            }
-            return null;
-        }
-        return createChainableTypeChecker(validate);
-    }
-    function createAnyTypeChecker() {
-        return createChainableTypeChecker(emptyFunctionThatReturnsNull);
-    }
-    function createArrayOfTypeChecker(typeChecker) {
-        function validate(props, propName, componentName, location, propFullName) {
-            if (typeof typeChecker !== "function") return new PropTypeError("Property `" + propFullName + "` of component `" + componentName + "` has invalid PropType notation inside arrayOf.");
-            var propValue = props[propName];
-            if (!Array.isArray(propValue)) {
-                var propType = getPropType(propValue);
-                return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected an array."));
-            }
-            for(var i = 0; i < propValue.length; i++){
-                var error = typeChecker(propValue, i, componentName, location, propFullName + "[" + i + "]", ReactPropTypesSecret);
-                if (error instanceof Error) return error;
-            }
-            return null;
-        }
-        return createChainableTypeChecker(validate);
-    }
-    function createElementTypeChecker() {
-        function validate(props, propName, componentName, location, propFullName) {
-            var propValue = props[propName];
-            if (!isValidElement(propValue)) {
-                var propType = getPropType(propValue);
-                return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected a single ReactElement."));
-            }
-            return null;
-        }
-        return createChainableTypeChecker(validate);
-    }
-    function createElementTypeTypeChecker() {
-        function validate(props, propName, componentName, location, propFullName) {
-            var propValue = props[propName];
-            if (!ReactIs.isValidElementType(propValue)) {
-                var propType = getPropType(propValue);
-                return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected a single ReactElement type."));
-            }
-            return null;
-        }
-        return createChainableTypeChecker(validate);
-    }
-    function createInstanceTypeChecker(expectedClass) {
-        function validate(props, propName, componentName, location, propFullName) {
-            if (!(props[propName] instanceof expectedClass)) {
-                var expectedClassName = expectedClass.name || ANONYMOUS;
-                var actualClassName = getClassName(props[propName]);
-                return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + actualClassName + "` supplied to `" + componentName + "`, expected ") + ("instance of `" + expectedClassName + "`."));
-            }
-            return null;
-        }
-        return createChainableTypeChecker(validate);
-    }
-    function createEnumTypeChecker(expectedValues) {
-        if (!Array.isArray(expectedValues)) {
-            {
-                if (arguments.length > 1) printWarning("Invalid arguments supplied to oneOf, expected an array, got " + arguments.length + " arguments. " + "A common mistake is to write oneOf(x, y, z) instead of oneOf([x, y, z]).");
-                else printWarning("Invalid argument supplied to oneOf, expected an array.");
-            }
-            return emptyFunctionThatReturnsNull;
-        }
-        function validate(props, propName, componentName, location, propFullName) {
-            var propValue = props[propName];
-            for(var i = 0; i < expectedValues.length; i++){
-                if (is(propValue, expectedValues[i])) return null;
-            }
-            var valuesString = JSON.stringify(expectedValues, function replacer(key, value) {
-                var type = getPreciseType(value);
-                if (type === "symbol") return String(value);
-                return value;
-            });
-            return new PropTypeError("Invalid " + location + " `" + propFullName + "` of value `" + String(propValue) + "` " + ("supplied to `" + componentName + "`, expected one of " + valuesString + "."));
-        }
-        return createChainableTypeChecker(validate);
-    }
-    function createObjectOfTypeChecker(typeChecker) {
-        function validate(props, propName, componentName, location, propFullName) {
-            if (typeof typeChecker !== "function") return new PropTypeError("Property `" + propFullName + "` of component `" + componentName + "` has invalid PropType notation inside objectOf.");
-            var propValue = props[propName];
-            var propType = getPropType(propValue);
-            if (propType !== "object") return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected an object."));
-            for(var key in propValue)if (has(propValue, key)) {
-                var error = typeChecker(propValue, key, componentName, location, propFullName + "." + key, ReactPropTypesSecret);
-                if (error instanceof Error) return error;
-            }
-            return null;
-        }
-        return createChainableTypeChecker(validate);
-    }
-    function createUnionTypeChecker(arrayOfTypeCheckers) {
-        if (!Array.isArray(arrayOfTypeCheckers)) {
-            printWarning("Invalid argument supplied to oneOfType, expected an instance of array.");
-            return emptyFunctionThatReturnsNull;
-        }
-        for(var i = 0; i < arrayOfTypeCheckers.length; i++){
-            var checker = arrayOfTypeCheckers[i];
-            if (typeof checker !== "function") {
-                printWarning("Invalid argument supplied to oneOfType. Expected an array of check functions, but received " + getPostfixForTypeWarning(checker) + " at index " + i + ".");
-                return emptyFunctionThatReturnsNull;
-            }
-        }
-        function validate(props, propName, componentName, location, propFullName) {
-            var expectedTypes = [];
-            for(var i = 0; i < arrayOfTypeCheckers.length; i++){
-                var checker = arrayOfTypeCheckers[i];
-                var checkerResult = checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret);
-                if (checkerResult == null) return null;
-                if (checkerResult.data && has(checkerResult.data, "expectedType")) expectedTypes.push(checkerResult.data.expectedType);
-            }
-            var expectedTypesMessage = expectedTypes.length > 0 ? ", expected one of type [" + expectedTypes.join(", ") + "]" : "";
-            return new PropTypeError("Invalid " + location + " `" + propFullName + "` supplied to " + ("`" + componentName + "`" + expectedTypesMessage + "."));
-        }
-        return createChainableTypeChecker(validate);
-    }
-    function createNodeChecker() {
-        function validate(props, propName, componentName, location, propFullName) {
-            if (!isNode(props[propName])) return new PropTypeError("Invalid " + location + " `" + propFullName + "` supplied to " + ("`" + componentName + "`, expected a ReactNode."));
-            return null;
-        }
-        return createChainableTypeChecker(validate);
-    }
-    function invalidValidatorError(componentName, location, propFullName, key, type) {
-        return new PropTypeError((componentName || "React class") + ": " + location + " type `" + propFullName + "." + key + "` is invalid; " + "it must be a function, usually from the `prop-types` package, but received `" + type + "`.");
-    }
-    function createShapeTypeChecker(shapeTypes) {
-        function validate(props, propName, componentName, location, propFullName) {
-            var propValue = props[propName];
-            var propType = getPropType(propValue);
-            if (propType !== "object") return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type `" + propType + "` " + ("supplied to `" + componentName + "`, expected `object`."));
-            for(var key in shapeTypes){
-                var checker = shapeTypes[key];
-                if (typeof checker !== "function") return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
-                var error = checker(propValue, key, componentName, location, propFullName + "." + key, ReactPropTypesSecret);
-                if (error) return error;
-            }
-            return null;
-        }
-        return createChainableTypeChecker(validate);
-    }
-    function createStrictShapeTypeChecker(shapeTypes) {
-        function validate(props, propName, componentName, location, propFullName) {
-            var propValue = props[propName];
-            var propType = getPropType(propValue);
-            if (propType !== "object") return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type `" + propType + "` " + ("supplied to `" + componentName + "`, expected `object`."));
-            // We need to check all keys in case some are required but missing from props.
-            var allKeys = assign({}, props[propName], shapeTypes);
-            for(var key in allKeys){
-                var checker = shapeTypes[key];
-                if (has(shapeTypes, key) && typeof checker !== "function") return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
-                if (!checker) return new PropTypeError("Invalid " + location + " `" + propFullName + "` key `" + key + "` supplied to `" + componentName + "`." + "\nBad object: " + JSON.stringify(props[propName], null, "  ") + "\nValid keys: " + JSON.stringify(Object.keys(shapeTypes), null, "  "));
-                var error = checker(propValue, key, componentName, location, propFullName + "." + key, ReactPropTypesSecret);
-                if (error) return error;
-            }
-            return null;
-        }
-        return createChainableTypeChecker(validate);
-    }
-    function isNode(propValue) {
-        switch(typeof propValue){
-            case "number":
-            case "string":
-            case "undefined":
-                return true;
-            case "boolean":
-                return !propValue;
-            case "object":
-                if (Array.isArray(propValue)) return propValue.every(isNode);
-                if (propValue === null || isValidElement(propValue)) return true;
-                var iteratorFn = getIteratorFn(propValue);
-                if (iteratorFn) {
-                    var iterator = iteratorFn.call(propValue);
-                    var step;
-                    if (iteratorFn !== propValue.entries) while(!(step = iterator.next()).done){
-                        if (!isNode(step.value)) return false;
-                    }
-                    else // Iterator will provide entry [k,v] tuples rather than values.
-                    while(!(step = iterator.next()).done){
-                        var entry = step.value;
-                        if (entry) {
-                            if (!isNode(entry[1])) return false;
-                        }
-                    }
-                } else return false;
-                return true;
-            default:
-                return false;
-        }
-    }
-    function isSymbol(propType, propValue) {
-        // Native Symbol.
-        if (propType === "symbol") return true;
-        // falsy value can't be a Symbol
-        if (!propValue) return false;
-        // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
-        if (propValue["@@toStringTag"] === "Symbol") return true;
-        // Fallback for non-spec compliant Symbols which are polyfilled.
-        if (typeof Symbol === "function" && propValue instanceof Symbol) return true;
-        return false;
-    }
-    // Equivalent of `typeof` but with special handling for array and regexp.
-    function getPropType(propValue) {
-        var propType = typeof propValue;
-        if (Array.isArray(propValue)) return "array";
-        if (propValue instanceof RegExp) // Old webkits (at least until Android 4.0) return 'function' rather than
-        // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
-        // passes PropTypes.object.
-        return "object";
-        if (isSymbol(propType, propValue)) return "symbol";
-        return propType;
-    }
-    // This handles more types than `getPropType`. Only used for error messages.
-    // See `createPrimitiveTypeChecker`.
-    function getPreciseType(propValue) {
-        if (typeof propValue === "undefined" || propValue === null) return "" + propValue;
-        var propType = getPropType(propValue);
-        if (propType === "object") {
-            if (propValue instanceof Date) return "date";
-            else if (propValue instanceof RegExp) return "regexp";
-        }
-        return propType;
-    }
-    // Returns a string that is postfixed to a warning about an invalid type.
-    // For example, "undefined" or "of type array"
-    function getPostfixForTypeWarning(value) {
-        var type = getPreciseType(value);
-        switch(type){
-            case "array":
-            case "object":
-                return "an " + type;
-            case "boolean":
-            case "date":
-            case "regexp":
-                return "a " + type;
-            default:
-                return type;
-        }
-    }
-    // Returns class name of the object, if any.
-    function getClassName(propValue) {
-        if (!propValue.constructor || !propValue.constructor.name) return ANONYMOUS;
-        return propValue.constructor.name;
-    }
-    ReactPropTypes.checkPropTypes = checkPropTypes;
-    ReactPropTypes.resetWarningCache = checkPropTypes.resetWarningCache;
-    ReactPropTypes.PropTypes = ReactPropTypes;
-    return ReactPropTypes;
-};
-
-},{"react-is":"7EuwB","object-assign":"7OXxh","./lib/ReactPropTypesSecret":"jZTZJ","./lib/has":"fqKuf","./checkPropTypes":"5VwyJ"}],"7OXxh":[function(require,module,exports) {
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/ "use strict";
-/* eslint-disable no-unused-vars */ var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-function toObject(val) {
-    if (val === null || val === undefined) throw new TypeError("Object.assign cannot be called with null or undefined");
-    return Object(val);
-}
-function shouldUseNative() {
-    try {
-        if (!Object.assign) return false;
-        // Detect buggy property enumeration order in older V8 versions.
-        // https://bugs.chromium.org/p/v8/issues/detail?id=4118
-        var test1 = new String("abc"); // eslint-disable-line no-new-wrappers
-        test1[5] = "de";
-        if (Object.getOwnPropertyNames(test1)[0] === "5") return false;
-        // https://bugs.chromium.org/p/v8/issues/detail?id=3056
-        var test2 = {};
-        for(var i = 0; i < 10; i++)test2["_" + String.fromCharCode(i)] = i;
-        var order2 = Object.getOwnPropertyNames(test2).map(function(n) {
-            return test2[n];
-        });
-        if (order2.join("") !== "0123456789") return false;
-        // https://bugs.chromium.org/p/v8/issues/detail?id=3056
-        var test3 = {};
-        "abcdefghijklmnopqrst".split("").forEach(function(letter) {
-            test3[letter] = letter;
-        });
-        if (Object.keys(Object.assign({}, test3)).join("") !== "abcdefghijklmnopqrst") return false;
-        return true;
-    } catch (err) {
-        // We don't expect any of the above to throw, but better to be safe.
-        return false;
-    }
-}
-module.exports = shouldUseNative() ? Object.assign : function(target, source) {
-    var from;
-    var to = toObject(target);
-    var symbols;
-    for(var s = 1; s < arguments.length; s++){
-        from = Object(arguments[s]);
-        for(var key in from)if (hasOwnProperty.call(from, key)) to[key] = from[key];
-        if (getOwnPropertySymbols) {
-            symbols = getOwnPropertySymbols(from);
-            for(var i = 0; i < symbols.length; i++)if (propIsEnumerable.call(from, symbols[i])) to[symbols[i]] = from[symbols[i]];
-        }
-    }
-    return to;
-};
-
-},{}],"jZTZJ":[function(require,module,exports) {
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */ "use strict";
-var ReactPropTypesSecret = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
-module.exports = ReactPropTypesSecret;
-
-},{}],"fqKuf":[function(require,module,exports) {
-module.exports = Function.call.bind(Object.prototype.hasOwnProperty);
-
-},{}],"5VwyJ":[function(require,module,exports) {
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */ "use strict";
-var printWarning = function() {};
-var ReactPropTypesSecret = require("./lib/ReactPropTypesSecret");
-var loggedTypeFailures = {};
-var has = require("./lib/has");
-printWarning = function(text) {
-    var message = "Warning: " + text;
-    if (typeof console !== "undefined") console.error(message);
-    try {
-        // --- Welcome to debugging React ---
-        // This error was thrown as a convenience so that you can use this stack
-        // to find the callsite that caused this warning to fire.
-        throw new Error(message);
-    } catch (x) {}
-};
-/**
- * Assert that the values match with the type specs.
- * Error messages are memorized and will only be shown once.
- *
- * @param {object} typeSpecs Map of name to a ReactPropType
- * @param {object} values Runtime values that need to be type-checked
- * @param {string} location e.g. "prop", "context", "child context"
- * @param {string} componentName Name of the component for error messages.
- * @param {?Function} getStack Returns the component stack.
- * @private
- */ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
-    for(var typeSpecName in typeSpecs)if (has(typeSpecs, typeSpecName)) {
-        var error;
-        // Prop type validation may throw. In case they do, we don't want to
-        // fail the render phase where it didn't fail before. So we log it.
-        // After these have been cleaned up, we'll let them throw.
-        try {
-            // This is intentionally an invariant that gets caught. It's the same
-            // behavior as without this statement except with a better message.
-            if (typeof typeSpecs[typeSpecName] !== "function") {
-                var err = Error((componentName || "React class") + ": " + location + " type `" + typeSpecName + "` is invalid; " + "it must be a function, usually from the `prop-types` package, but received `" + typeof typeSpecs[typeSpecName] + "`." + "This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.");
-                err.name = "Invariant Violation";
-                throw err;
-            }
-            error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
-        } catch (ex) {
-            error = ex;
-        }
-        if (error && !(error instanceof Error)) printWarning((componentName || "React class") + ": type specification of " + location + " `" + typeSpecName + "` is invalid; the type checker " + "function must return `null` or an `Error` but returned a " + typeof error + ". " + "You may have forgotten to pass an argument to the type checker " + "creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and " + "shape all require an argument).");
-        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
-            // Only monitor this failure once because there tends to be a lot of the
-            // same error.
-            loggedTypeFailures[error.message] = true;
-            var stack = getStack ? getStack() : "";
-            printWarning("Failed " + location + " type: " + error.message + (stack != null ? stack : ""));
-        }
-    }
-}
-/**
- * Resets warning cache when testing.
- *
- * @private
- */ checkPropTypes.resetWarningCache = function() {
-    loggedTypeFailures = {};
-};
-module.exports = checkPropTypes;
-
-},{"./lib/ReactPropTypesSecret":"jZTZJ","./lib/has":"fqKuf"}],"3e7RK":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "devdotto.3bb7afaf.svg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"26uWO":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "envelope.5e5e1d9e.svg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"k7Qiw":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "github.51e0fbb2.svg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"38Ug0":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "instagram.84def2ad.svg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"gDewj":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "linkedin.49c2dcdf.svg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"4UTZr":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "medium.6232db8b.svg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"irVHW":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "twitter.7541cc84.svg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"aALAo":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "youtube.c3557793.svg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"9Dt2F":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$2a62 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$2a62.prelude(module);
-
-try {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _jsxDevRuntime = require("react/jsx-dev-runtime");
-/**
- * Header component
- *
- * Top navigation bar for your site. Set to remain visible as the
- * user scrolls so that they can constantly reach any part of your page.
- */ var _react = require("react");
-var _reactDefault = parcelHelpers.interopDefault(_react);
-const Header = ()=>{
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        style: {
-            position: "fixed",
-            display: "flex",
-            justifyContent: "center",
-            gap: "2rem",
-            background: "rgba(255,255,255,0.75)",
-            padding: "1rem",
-            top: 0,
-            width: "100%",
-            zIndex: 10
-        },
-        children: [
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
-                href: "#home",
-                children: "Home"
-            }, void 0, false, {
-                fileName: "src/Components/Header.jsx",
-                lineNumber: 24,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
-                href: "#about",
-                children: "About"
-            }, void 0, false, {
-                fileName: "src/Components/Header.jsx",
-                lineNumber: 25,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
-                href: "#portfolio",
-                children: "Portfolio"
-            }, void 0, false, {
-                fileName: "src/Components/Header.jsx",
-                lineNumber: 26,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
-                href: "#footer",
-                children: "Contact"
-            }, void 0, false, {
-                fileName: "src/Components/Header.jsx",
-                lineNumber: 27,
-                columnNumber: 7
-            }, undefined)
-        ]
-    }, void 0, true, {
-        fileName: "src/Components/Header.jsx",
-        lineNumber: 11,
-        columnNumber: 5
-    }, undefined);
-};
-_c = Header;
-exports.default = Header;
-var _c;
-$RefreshReg$(_c, "Header");
-
-  $parcel$ReactRefreshHelpers$2a62.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"jIEVO":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$0d4d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$0d4d.prelude(module);
-
-try {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _jsxDevRuntime = require("react/jsx-dev-runtime");
-/**
- * Home component
- *
- * The section at the top of the page to display image of your
- * choice, name and title that describes your career focus.
- */ var _react = require("react");
-var _reactDefault = parcelHelpers.interopDefault(_react);
-var _downArrowSvg = require("../images/down-arrow.svg");
-var _downArrowSvgDefault = parcelHelpers.interopDefault(_downArrowSvg);
-var _propTypes = require("prop-types");
-var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
-/**
- * Home background image
- *
- * Below is a sample image. Upload the image of your choice into the "images"
- * directory and import here for use. Then, set imageAltText to string that 
- * represents what you see in that image.
- *
- *
- * Need an image? Check out https://unsplash.com to download a photo you
- * freely use on your site.
- */ var _ajBgImgJpg = require("../images/Aj-BgImg.jpg");
-var _ajBgImgJpgDefault = parcelHelpers.interopDefault(_ajBgImgJpg);
-const imageAltText = "Aagam Golechha Sitting on a Rock with an Awesome Sunrise in BackGround";
-const Home = ({ name , title  })=>{
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("section", {
-        id: "home",
-        className: "min-height",
-        children: [
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                className: "background",
-                src: (0, _ajBgImgJpgDefault.default),
-                alt: imageAltText
-            }, void 0, false, {
-                fileName: "src/Components/Home.jsx",
-                lineNumber: 30,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                style: {
-                    position: "absolute",
-                    top: "15rem",
-                    left: "4rem",
-                    width: "17rem"
-                },
-                children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
-                        style: {
-                            lineHeight: "0.9"
-                        },
-                        children: name
-                    }, void 0, false, {
-                        fileName: "src/Components/Home.jsx",
-                        lineNumber: 32,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                        children: title
-                    }, void 0, false, {
-                        fileName: "src/Components/Home.jsx",
-                        lineNumber: 33,
-                        columnNumber: 9
-                    }, undefined)
-                ]
-            }, void 0, true, {
-                fileName: "src/Components/Home.jsx",
-                lineNumber: 31,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                style: {
-                    position: "absolute",
-                    bottom: "1rem",
-                    left: "50%"
-                },
-                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                    src: (0, _downArrowSvgDefault.default),
-                    style: {
-                        height: "3rem",
-                        width: "3rem"
-                    },
-                    alt: "Down-Arrow"
-                }, void 0, false, {
-                    fileName: "src/Components/Home.jsx",
-                    lineNumber: 36,
-                    columnNumber: 9
-                }, undefined)
-            }, void 0, false, {
-                fileName: "src/Components/Home.jsx",
-                lineNumber: 35,
-                columnNumber: 7
-            }, undefined)
-        ]
-    }, void 0, true, {
-        fileName: "src/Components/Home.jsx",
-        lineNumber: 29,
-        columnNumber: 5
-    }, undefined);
-};
-_c = Home;
-Home.defaultProps = {
-    name: "",
-    title: ""
-};
-Home.propTypes = {
-    name: (0, _propTypesDefault.default).string.isRequired,
-    title: (0, _propTypesDefault.default).string.isRequired
-};
-exports.default = Home;
-var _c;
-$RefreshReg$(_c, "Home");
-
-  $parcel$ReactRefreshHelpers$0d4d.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","../images/down-arrow.svg":"fHMBx","prop-types":"7wKI2","../images/Aj-BgImg.jpg":"iZMCB","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"fHMBx":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "down-arrow.1037091f.svg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"iZMCB":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "Aj-BgImg.94f62ac5.jpg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"lCaEt":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$ed0d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$ed0d.prelude(module);
-
-try {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _jsxDevRuntime = require("react/jsx-dev-runtime");
-/**
- * Portfolio component
- *
- * Highlights some of  your creations. These can be designs, websites,
- * open source contributions, articles you've written and more.
- *
- * This is a great area for you to to continually add to and refine
- * as you continue to learn and create.
- */ var _react = require("react");
-var _reactDefault = parcelHelpers.interopDefault(_react);
-/**
- * Desk image
- *
- * Below is a sample desk image. Feel free to update this to an image of your choice,
- * updating below imageAltText to string that represents what you see in that image.
- *
- * Need an image? Check out https://unsplash.com to download a photo you
- * freely use on your site.
- */ var _designDeskJpeg = require("../images/design-desk.jpeg");
-var _designDeskJpegDefault = parcelHelpers.interopDefault(_designDeskJpeg);
-const imageAltText = "Desktop with Books and Laptop";
-/**
- * Project list
- *
- * An array of objects that will be used to display for your project
- * links section. Below is a sample, update to reflect links you'd like to highlight.
- */ const projectList = [
-    {
-        title: "FOOD - HUB",
-        description: "Developed a Dynamic food application using ReactJS, featuring a curated restaurant listing and interactive pages for detailed Menus.",
-        url: "https://github.com/AagamAJ/Food-Hub"
-    },
-    {
-        title: "NEWS WEB-PAGE",
-        description: "Implemented a user-friendly interface that fetches and loads current news from various sources utilizing API endpoints.",
-        url: "https://github.com/AagamAJ/Dynamic-News-WebPage"
-    },
-    {
-        title: "MY RESUME SITE",
-        description: "Created using technologies such as HTML and CSS, and deployed to GitHub pages. Includes my Expertise and Problem Solving Abilities.",
-        url: "https://aagam-resume.netlify.app/"
-    },
-    {
-        title: "MY - PORTFOLIO",
-        description: "I've crafted my portfolio website using React.js and JSX, blending my coding prowess with design expertise, in a visually appealing and interactive manner.",
-        url: "https://aagamjain-portfolio.netlify.app/"
-    }, 
-];
-const Portfolio = ()=>{
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("section", {
-        className: "padding",
-        id: "portfolio",
-        children: [
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                style: {
-                    textAlign: "center"
-                },
-                children: "Portfolio"
-            }, void 0, false, {
-                fileName: "src/Components/Portfolio.jsx",
-                lineNumber: 62,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                style: {
-                    display: "flex",
-                    flexDirection: "row",
-                    paddingTop: "3rem"
-                },
-                children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        style: {
-                            maxWidth: "38%",
-                            alignSelf: "center",
-                            marginLeft: "3rem",
-                            lineHeight: "0"
-                        },
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                            src: (0, _designDeskJpegDefault.default),
-                            style: {
-                                height: "25rem",
-                                width: "95%",
-                                objectFit: "cover"
-                            },
-                            alt: imageAltText
-                        }, void 0, false, {
-                            fileName: "src/Components/Portfolio.jsx",
-                            lineNumber: 65,
-                            columnNumber: 11
-                        }, undefined)
-                    }, void 0, false, {
-                        fileName: "src/Components/Portfolio.jsx",
-                        lineNumber: 64,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "container",
-                        children: projectList.map((project)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                className: "box",
-                                children: [
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("a", {
-                                        href: project.url,
-                                        target: "_blank",
-                                        rel: "noopener noreferrer",
-                                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
-                                            style: {
-                                                flexBasis: "40px"
-                                            },
-                                            children: project.title
-                                        }, void 0, false, {
-                                            fileName: "src/Components/Portfolio.jsx",
-                                            lineNumber: 75,
-                                            columnNumber: 17
-                                        }, undefined)
-                                    }, void 0, false, {
-                                        fileName: "src/Components/Portfolio.jsx",
-                                        lineNumber: 74,
-                                        columnNumber: 15
-                                    }, undefined),
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                        className: "small",
-                                        children: project.description
-                                    }, void 0, false, {
-                                        fileName: "src/Components/Portfolio.jsx",
-                                        lineNumber: 77,
-                                        columnNumber: 15
-                                    }, undefined)
-                                ]
-                            }, project.title, true, {
-                                fileName: "src/Components/Portfolio.jsx",
-                                lineNumber: 73,
-                                columnNumber: 13
-                            }, undefined))
-                    }, void 0, false, {
-                        fileName: "src/Components/Portfolio.jsx",
-                        lineNumber: 71,
-                        columnNumber: 9
-                    }, undefined)
-                ]
-            }, void 0, true, {
-                fileName: "src/Components/Portfolio.jsx",
-                lineNumber: 63,
-                columnNumber: 7
-            }, undefined)
-        ]
-    }, void 0, true, {
-        fileName: "src/Components/Portfolio.jsx",
-        lineNumber: 61,
-        columnNumber: 5
-    }, undefined);
-};
-_c = Portfolio;
-exports.default = Portfolio;
-var _c;
-$RefreshReg$(_c, "Portfolio");
-
-  $parcel$ReactRefreshHelpers$ed0d.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","../images/design-desk.jpeg":"2Gdds","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"2Gdds":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "design-desk.df4cd0cf.jpeg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}]},["1xC6H","awEvQ","bB7Pu"], "bB7Pu", "parcelRequire8735")
+},{}]},["km5uZ","1xC6H","bB7Pu"], "bB7Pu", "parcelRequire8735")
 
 //# sourceMappingURL=index.3d214d75.js.map

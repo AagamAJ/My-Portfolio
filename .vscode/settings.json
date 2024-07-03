@@ -1,5 +1,8 @@
 {
     "java.dependency.syncWithFolderExplorer": true,
     "java.project.explorer.showNonJavaResources": false,
-    "java.dependency.packagePresentation": "flat"
+    "java.dependency.packagePresentation": "flat",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "notebook.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFoldingRangeProvider": "esbenp.prettier-vscode"
 }

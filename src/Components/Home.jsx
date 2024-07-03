@@ -28,12 +28,14 @@ const Home = ({ name, title }) => {
   return (
     <section id="home" className="min-height">
       <img className="background" src={image} alt={imageAltText} />
-      <div style={{ position: "absolute", top: "15rem", left: "4rem", width: "17rem" }}>
-        <h1 style={{lineHeight: "0.9"}}>{name}</h1>
+      <div className="my-name">
+        <h1>{name}</h1>
         <h2>{title}</h2>
       </div>
-      <div style={{ position: "absolute", bottom: "1rem", left: "50%" }}>
-        <img src={arrowSvg} style={{ height: "3rem", width: "3rem" }} alt="Down-Arrow" />
+      <div className="down-arrow">
+        <a href="#about">
+          <img src={arrowSvg} alt="Down-Arrow" />
+        </a>
       </div>
     </section>
   );

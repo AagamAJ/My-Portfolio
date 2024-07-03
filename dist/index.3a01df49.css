@@ -1,8 +1,8 @@
 @import "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Montserrat:wght@200;400;600;800&display=swap";
 html, body {
-  height: 100%;
-  width: 100%;
   scroll-behavior: smooth;
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
   font-family: Montserrat, sans-serif;
@@ -10,8 +10,8 @@ html, body {
 }
 
 div#main {
-  width: 100vw;
   flex-direction: column;
+  width: 100vw;
   display: flex;
 }
 
@@ -24,16 +24,12 @@ section.min-height {
   min-height: 100vh;
 }
 
-section.padding {
-  padding: 5rem 0;
-}
-
 section img.background {
-  height: 100%;
   object-fit: cover;
   pointer-events: none;
-  width: 100vmax;
   z-index: -1;
+  width: 100vmax;
+  height: 100%;
   position: absolute;
   top: 0;
   left: 50%;
@@ -97,6 +93,97 @@ a:hover {
   color: #4e567e;
 }
 
+.header-div {
+  z-index: 10;
+  background: #ffffffbf;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  position: fixed;
+  top: 0;
+}
+
+.my-name {
+  width: 17rem;
+  position: absolute;
+  top: 16rem;
+  left: 4rem;
+}
+
+.my-name h1 {
+  line-height: .9;
+}
+
+.down-arrow {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+}
+
+.down-arrow a {
+  width: 3rem;
+  height: 3rem;
+}
+
+.section-about {
+  padding: 5rem 0;
+}
+
+#about {
+  text-align: center;
+  background-color: #fff;
+  width: 50%;
+  margin: 3rem auto;
+  padding: 4rem;
+}
+
+.about-head {
+  font-weight: 600;
+}
+
+.about-list {
+  text-align: left;
+  columns: 2;
+  font-size: "1.25rem";
+  margin: "2rem 3rem";
+  gap: "3rem";
+  list-style-type: circle;
+}
+
+.about-below-quote {
+  padding: 1rem 3rem 0;
+}
+
+.padding {
+  padding: 5rem 0;
+}
+
+.portfolio-head {
+  text-align: center;
+  font-weight: 600;
+}
+
+.portfolio-big-container {
+  flex-direction: row;
+  padding-top: 3rem;
+  display: flex;
+}
+
+.portfolio-image {
+  align-self: center;
+  max-width: 38%;
+  margin-left: 3rem;
+  line-height: 0;
+}
+
+.portfolio-image img {
+  object-fit: cover;
+  width: 95%;
+  height: 25rem;
+}
+
 .container {
   grid-gap: 20px;
   grid-template-columns: 330px 300px;
@@ -114,9 +201,13 @@ a:hover {
   display: flex;
 }
 
-img.socialIcon {
-  height: 30px;
-  width: 30px;
+.project-title {
+  flex-basis: 40px;
+  font-weight: 600;
 }
 
+img.socialIcon {
+  width: 30px;
+  height: 30px;
+}
 /*# sourceMappingURL=index.3a01df49.css.map */

@@ -1,0 +1,19 @@
+/* For Screen Width */
+/* below 1200 x 758 */
+
+p.large {
+    font-size: 20px;
+}
+
+.portfolio-image {
+    display: none;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+}
+
