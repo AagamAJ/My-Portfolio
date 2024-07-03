@@ -1,4 +1,4 @@
-Click Here to View &nbsp;[My Portfolio](https://aagamjain-portfolio.netlify.app/)
+Click Here to View &nbsp;[My Portfolio](https://aagamaj.github.io/My-Portfolio/)
 
 # Portfolio
 
